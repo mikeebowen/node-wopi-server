@@ -7,9 +7,10 @@ const app = express()
 const router = express.Router()
 const { localStoragePath } = require('./config.json')
 const { promisify } = require('util')
+const getDiscoveryInfo = require('./middleware/getDiscoveryInfo')
 const statPromise = promisify(stat)
 const readFilePromise = promisify(readFile)
-
+app.get('*', getDiscoveryInfo)
 router.route('/files/:file_id/contents').get(async (req, res, next) => {
   try {
     const filePath = join(...localStoragePath, req.params.file_id)
