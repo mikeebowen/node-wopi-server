@@ -1,11 +1,11 @@
 module.exports = {
   root: true,
   parserOptions: {
-    ecmaVersion: 6,
+    ecmaVersion: 2017,
   },
-  engines: {
-    node: '8',
-  },
+  // engines: {
+  //   node: '8',
+  // },
   extends: ['eslint:recommended'],
   env: { node: true },
   rules: {
