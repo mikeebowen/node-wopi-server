@@ -6,4 +6,5 @@ module.exports = {
   getFile: require('./getFile'),
   lock: require('./lock'),
   putFile: require('./putFile'),
+  getRawBody: require('./getRawBody'),
 }
