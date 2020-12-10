@@ -44,15 +44,25 @@ module.exports = async (req, res, next) => {
       // res.status(200).json(fileInfoResponse)
       res.send({
         BaseFileName: req.params.file_id,
-        OwnerId: userInfo().username,
+        OwnerId: fileStats.uid,
         Size: fileStats.size,
-        UserId: userInfo().username,
-        UserFriendlyName: 'Contoso User',
-        Version: 'aaabbbcccdddeee',
+        UserId: userInfo().uid,
+        UserFriendlyName: userInfo().username,
+        Version: fileStats.ino.toString(),
         SupportsLocks: true,
         WebEditingDisabled: false,
         UserCanWrite: true,
         SupportsUpdate: true,
+        SupportsCobalt: false,
+        // LastModifiedTime: new Date(fileStats.ctimeMs).toISOString(),
+        LastModifiedTime: new Date().toISOString(),
+        BreadcrumbBrandName: 'LocalStorage WOPI Host',
+        BreadcrumbBrandUrl: 'http://localhost:3000',
+        BreadcrumbFolderName: 'WopiStorage',
+        BreadcrumbFolderUrl: 'http://localhost:3000',
+        BreadcrumbDocName: 'test',
+        ReadOnly: false,
+        UserCanNotWriteRelative: true,
       })
     } else {
       res.status(404).send('file does not exist')

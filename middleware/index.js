@@ -7,4 +7,5 @@ module.exports = {
   lock: require('./lock'),
   putFile: require('./putFile'),
   getRawBody: require('./getRawBody'),
+  checkAccess: require('./checkAccess'),
 }
