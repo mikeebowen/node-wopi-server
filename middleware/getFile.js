@@ -1,6 +1,6 @@
 'use strict'
 
-const { join } = require('path')
+const { join, resolve } = require('path')
 const { readFile, existsSync } = require('fs')
 const { promisify } = require('util')
 let readFilePromise = promisify(readFile)
@@ -8,7 +8,7 @@ const { wopiStorageFolder, projectDir } = require('../config')
 
 module.exports = async (req, res, next) => {
   try {
-    const filePath = join(projectDir, wopiStorageFolder, req.params.file_id)
+    const filePath = join(resolve('./'), wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
       const file = await readFilePromise(filePath)
       res.status(200)
