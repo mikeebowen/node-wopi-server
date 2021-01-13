@@ -12,29 +12,18 @@ module.exports = async (req, res, next) => {
   const lockValue = req.header('X-WOPI-Lock')
 
   if (!existsSync(filePath)) {
+    res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
     return res.sendStatus(409)
   }
   const stats = await statPromise(filePath)
-  if (stats.size) {
-    if (lockValue && fileInfo.lock[file_id] === lockValue) {
-      const wstream = createWriteStream(filePath)
-      wstream.write(req.rawBody)
-      const fileStats = await statPromise(filePath)
-      fileInfo.info.Version = fileStats.ctimeMs.toString()
-      res.setHeader('X-WOPI-ItemVersion', fileStats.ctimeMs.toString())
-      return res.sendStatus(200)
-    } else {
-      res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
-      return res.sendStatus(409)
-    }
-  }
-  if (!Object.hasOwnProperty.call(fileInfo.lock, file_id) || (lockValue && fileInfo.lock[file_id] === lockValue)) {
+  if ((!stats.size && !Object.hasOwnProperty.call(fileInfo.lock, file_id)) || (lockValue && fileInfo.lock[file_id] === lockValue)) {
     fileInfo.lock[file_id] = lockValue
     const wStream = createWriteStream(filePath)
     wStream.write(req.rawBody)
     const fileStats = await statPromise(filePath)
-    fileInfo.info.Version = fileStats.ctimeMs.toString()
-    res.setHeader('X-WOPI-ItemVersion', fileStats.ctimeMs.toString())
+    const time = new Date(fileStats.mtime).toISOString()
+    fileInfo.info.Version = time
+    res.setHeader('X-WOPI-ItemVersion', time)
     return res.sendStatus(200)
   } else {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
