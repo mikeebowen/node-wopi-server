@@ -1,33 +1,56 @@
 'use strict'
 
-let xWopiLock = {}
+const fileInfo = require('./fileInfo')
 
 module.exports = (req, res, next) => {
   const xWopiOverride = req.header('X-WOPI-Override')
   const lockValue = req.header('X-WOPI-Lock')
+  const oldLockValue = req.header('X-WOPI-OldLock')
+
   if (!lockValue) {
     return res.sendStatus(400)
   }
-  const header = xWopiOverride ? xWopiOverride.toUpperCase() : undefined
+  const header = xWopiOverride ? xWopiOverride.toLowerCase() : undefined
   const { file_id } = req.params
-  if (!Object.hasOwnProperty.call(xWopiLock, file_id) || xWopiLock[file_id] === lockValue) {
-    switch (header) {
-      case 'LOCK':
-        xWopiLock[file_id] = lockValue
-        return res.sendStatus(200)
-      case 'UNLOCK' || 'REFRESH_LOCK':
-        if (!Object.hasOwnProperty.call(xWopiLock, file_id)) {
-          res.setHeader('X-WOPI-Lock', '')
-          return res.sendStatus(409)
-        } else {
-          delete xWopiLock[file_id]
-          return res.sendStatus(200)
+  switch (header) {
+    case 'lock':
+      if (
+        !Object.hasOwnProperty.call(fileInfo.lock, file_id) ||
+        fileInfo.lock[file_id] === lockValue ||
+        fileInfo.lock[file_id] === oldLockValue
+      ) {
+        fileInfo.lock[file_id] = lockValue
+        if (fileInfo.info.Version) {
+          res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
         }
-      default:
-        res.setHeader('X-WOPI-Lock', xWopiLock[file_id])
+        return res.sendStatus(200)
+      } else {
+        res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
         return res.sendStatus(409)
-    }
-  } else {
-    return res.sendStatus(400)
+      }
+    case 'unlock':
+      if (!Object.hasOwnProperty.call(fileInfo.lock, file_id) || fileInfo.lock[file_id] !== lockValue) {
+        res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
+        return res.sendStatus(409)
+      } else {
+        delete fileInfo.lock[file_id]
+        if (fileInfo.info.Version) {
+          res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
+        }
+        return res.sendStatus(200)
+      }
+    case 'refresh_lock':
+      if (fileInfo.lock[file_id] === lockValue) {
+        if (fileInfo.info.Version) {
+          res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
+        }
+        return res.sendStatus(200)
+      } else {
+        res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
+        return res.sendStatus(409)
+      }
+    default:
+      res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
+      return res.sendStatus(409)
   }
 }

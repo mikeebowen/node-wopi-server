@@ -1,23 +1,27 @@
 'use strict'
 
-const { join, resolve } = require('path')
+const { join, parse } = require('path')
 const { readFile, existsSync } = require('fs')
 const { promisify } = require('util')
-let readFilePromise = promisify(readFile)
-const { wopiStorageFolder, projectDir } = require('../config')
+const readFilePromise = promisify(readFile)
+const { wopiStorageFolder } = require('../config')
+const fileInfo = require('./fileInfo')
 
 module.exports = async (req, res, next) => {
   try {
-    const filePath = join(resolve('./'), wopiStorageFolder, req.params.file_id)
+    const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
       const file = await readFilePromise(filePath)
+      if (fileInfo.info.Version) {
+        res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
+      }
       res.status(200)
-      res.send(file)
+      return res.send(file)
     } else {
       res.status(404)
-      res.send('not found')
+      return res.send('not found')
     }
   } catch (err) {
-    console.error(err.message || err)
+    return console.error(err.message || err)
   }
 }

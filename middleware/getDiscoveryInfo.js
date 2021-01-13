@@ -4,7 +4,7 @@ const convert = require('xml-js')
 
 module.exports = async (req, res, next) => {
   const options = {
-    host: '172.22.151.150',
+    host: 'hunyu-ws2019',
     path: '/hosting/discovery',
   }
 
