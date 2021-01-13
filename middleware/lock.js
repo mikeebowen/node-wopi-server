@@ -34,9 +34,7 @@ module.exports = (req, res, next) => {
         return res.sendStatus(409)
       } else {
         delete fileInfo.lock[file_id]
-        if (fileInfo.info.Version) {
-          res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
-        }
+        res.setHeader('X-WOPI-ItemVersion', '')
         return res.sendStatus(200)
       }
     case 'refresh_lock':

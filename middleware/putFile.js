@@ -19,9 +19,9 @@ module.exports = async (req, res, next) => {
     if (lockValue && fileInfo.lock[file_id] === lockValue) {
       const wstream = createWriteStream(filePath)
       wstream.write(req.rawBody)
-      if (fileInfo.info.Version) {
-        res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
-      }
+      const fileStats = await statPromise(filePath)
+      fileInfo.info.Version = fileStats.ctimeMs.toString()
+      res.setHeader('X-WOPI-ItemVersion', fileStats.ctimeMs.toString())
       return res.sendStatus(200)
     } else {
       res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
@@ -32,6 +32,9 @@ module.exports = async (req, res, next) => {
     fileInfo.lock[file_id] = lockValue
     const wStream = createWriteStream(filePath)
     wStream.write(req.rawBody)
+    const fileStats = await statPromise(filePath)
+    fileInfo.info.Version = fileStats.ctimeMs.toString()
+    res.setHeader('X-WOPI-ItemVersion', fileStats.ctimeMs.toString())
     return res.sendStatus(200)
   } else {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
