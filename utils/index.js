@@ -2,4 +2,5 @@
 
 module.exports = {
   fileInfo: require('./fileInfo'),
+  updateFile: require('./updateFile'),
 }
