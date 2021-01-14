@@ -44,7 +44,7 @@ module.exports = async (req, res, next) => {
       //   'https://microsoft-my.sharepoint.com/:w:/r/personal/mibowe_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B55C14245-7FA9-40E1-9695-9C8E5E3D364C%7D&file=test.docx&action=default&mobileredirect=true',
       // })
       // res.status(200).json(fileInfoResponse)
-      fileInfo.info = {
+      const info = {
         BaseFileName: req.params.file_id,
         OwnerId: userInfo().uid.toString(),
         Size: fileStats.size,
@@ -66,6 +66,11 @@ module.exports = async (req, res, next) => {
         ReadOnly: false,
         UserCanNotWriteRelative: true,
       }
+      Object.keys(info).forEach(k => {
+        if (!Object.hasOwnProperty.call(fileInfo.info, k)) {
+          fileInfo.info[k] = info[k]
+        }
+      })
       res.send(fileInfo.info)
     } else {
       res.status(404).send('file does not exist')
