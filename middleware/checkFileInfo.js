@@ -52,6 +52,7 @@ module.exports = async (req, res, next) => {
         UserFriendlyName: userInfo().username,
         Version: new Date(fileStats.mtime).toISOString(),
         SupportsLocks: true,
+        SupportsGetLock: true,
         // WebEditingDisabled: false,
         UserCanWrite: true,
         SupportsUpdate: true,

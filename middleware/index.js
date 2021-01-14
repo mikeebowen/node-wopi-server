@@ -10,4 +10,5 @@ module.exports = {
   lock: require('./lock'),
   unlock: require('./unlock'),
   refreshLock: require('./refreshLock'),
+  getLock: require('./getLock'),
 }
