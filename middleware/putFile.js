@@ -4,7 +4,7 @@ const { createWriteStream, existsSync, stat } = require('fs')
 const { promisify } = require('util')
 const { wopiStorageFolder } = require('../config')
 const statPromise = promisify(stat)
-const fileInfo = require('./fileInfo')
+const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params

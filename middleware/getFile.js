@@ -5,7 +5,7 @@ const { readFile, existsSync } = require('fs')
 const { promisify } = require('util')
 const readFilePromise = promisify(readFile)
 const { wopiStorageFolder } = require('../config')
-const fileInfo = require('./fileInfo')
+const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {

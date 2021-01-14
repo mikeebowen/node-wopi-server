@@ -4,13 +4,13 @@ const { join } = require('path')
 const express = require('express')
 const app = express()
 const router = express.Router()
-const { getDiscoveryInfo, getFile, checkFileInfo, lock, putFile, getRawBody, checkAccess } = require('./middleware')
+const { getDiscoveryInfo, getFile, checkFileInfo, putFile, getRawBody, checkAccess, filesFileId } = require('./middleware')
 const port = process.env.PORT || 3000
 
 app.use(getRawBody) // adds the raw binary of the post body to req.rawBody
 // app.get('*', getDiscoveryInfo)
 router.route('/files/:file_id/contents').get(getFile).post(putFile)
-router.route('/files/:file_id').get(checkFileInfo).post(lock)
+router.route('/files/:file_id').get(checkFileInfo).post(filesFileId)
 app.use('/wopi', checkAccess)
 app.use('/wopi', router)
 app.get('/', (req, res, next) => {

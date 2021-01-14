@@ -7,7 +7,7 @@ const { userInfo } = require('os')
 const { promisify } = require('util')
 const statPromise = promisify(stat)
 const { wopiStorageFolder } = require('../config')
-const fileInfo = require('./fileInfo')
+const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {
