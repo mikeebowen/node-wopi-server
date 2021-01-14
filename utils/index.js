@@ -2,5 +2,4 @@
 
 module.exports = {
   fileInfo: require('./fileInfo'),
-  lock: require('./lock'),
 }
