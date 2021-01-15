@@ -53,6 +53,7 @@ module.exports = async (req, res, next) => {
         Version: new Date(fileStats.mtime).toISOString(),
         SupportsLocks: true,
         SupportsGetLock: true,
+        SupportsDeleteFile: true,
         // WebEditingDisabled: false,
         UserCanWrite: true,
         SupportsUpdate: true,

@@ -12,4 +12,5 @@ module.exports = {
   unlock: require('./unlock'),
   refreshLock: require('./refreshLock'),
   getLock: require('./getLock'),
+  deleteFile: require('./deleteFile'),
 }

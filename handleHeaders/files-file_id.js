@@ -1,5 +1,5 @@
 'use strict'
-const { lock, refreshLock, unlock, getLock, putRelativeFile } = require('../middleware')
+const { lock, refreshLock, unlock, getLock, putRelativeFile, deleteFile } = require('../middleware')
 const { fileInfo } = require('../utils')
 module.exports = (req, res, next) => {
   const operation = req.header('X-WOPI-Override')
@@ -20,6 +20,9 @@ module.exports = (req, res, next) => {
       break
     case 'PUT_RELATIVE':
       putRelativeFile(req, res, next)
+      break
+    case 'DELETE':
+      deleteFile(req, res, next)
       break
     default:
       res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
