@@ -1,6 +1,30 @@
 'use strict'
 
-const fileInfo = { lock: {}, info: {} }
+const fileInfo = {
+  lock: {},
+  info: {},
+  supportedExtensions: [
+    'doc',
+    'docx',
+    'dotx',
+    'dot',
+    'dotm',
+    'xls',
+    'xlsx',
+    'xlsm',
+    'xlm',
+    'xlsb',
+    'ppt',
+    'pptx',
+    'pps',
+    'ppsx',
+    'potx',
+    'pot',
+    'pptm',
+    'potm',
+    'ppsm',
+  ],
+}
 Object.seal(fileInfo)
 
 module.exports = fileInfo

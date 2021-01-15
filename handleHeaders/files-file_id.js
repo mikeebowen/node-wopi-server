@@ -19,8 +19,7 @@ module.exports = (req, res, next) => {
       getLock(req, res, next)
       break
     case 'PUT_RELATIVE':
-      // putRelativeFile(req, res, next)
-      res.sendStatus(501)
+      putRelativeFile(req, res, next)
       break
     default:
       res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')

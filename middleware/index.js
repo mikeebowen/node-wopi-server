@@ -5,6 +5,7 @@ module.exports = {
   getDiscoveryInfo: require('./getDiscoveryInfo'),
   getFile: require('./getFile'),
   putFile: require('./putFile'),
+  putRelativeFile: require('./putRelativeFile'),
   getRawBody: require('./getRawBody'),
   checkAccess: require('./checkAccess'),
   lock: require('./lock'),
