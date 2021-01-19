@@ -2,7 +2,8 @@
 
 module.exports = (req, res, next) => {
   const { access_token } = req.query
-  if (access_token && access_token.toLowerCase() !== 'invalid') {
+  const token = access_token || req.header('authorization')
+  if (token && token.toLowerCase() !== 'invalid') {
     next()
   } else {
     res.status(401).send('Invalid Token')

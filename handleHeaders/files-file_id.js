@@ -19,7 +19,8 @@ module.exports = (req, res, next) => {
       getLock(req, res, next)
       break
     case 'PUT_RELATIVE':
-      putRelativeFile(req, res, next)
+      // putRelativeFile(req, res, next)
+      res.sendStatus(501)
       break
     case 'DELETE':
       deleteFile(req, res, next)
