@@ -18,8 +18,8 @@ module.exports = async (req, res, next) => {
   const stats = await statPromise(filePath)
   if ((!stats.size && !Object.hasOwnProperty.call(fileInfo.lock, file_id)) || (lockValue && fileInfo.lock[file_id] === lockValue)) {
     fileInfo.lock[file_id] = lockValue
-    const time = await updateFile(filePath, req.rawBody)
-    res.setHeader('X-WOPI-ItemVersion', time)
+    await updateFile(filePath, req.rawBody, true)
+    res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
     return res.sendStatus(200)
   } else {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
