@@ -1,9 +1,6 @@
 'use strict'
-const { stat, unlink } = require('fs')
+const { stat, unlink } = require('fs/promises')
 const { join, parse } = require('path')
-const { promisify } = require('util')
-const statPromise = promisify(stat)
-const unlinkPromise = promisify(unlink)
 const { fileInfo } = require('../utils')
 const { wopiStorageFolder } = require('../config')
 
@@ -15,8 +12,8 @@ module.exports = async (req, res, next) => {
     return res.sendStatus(409)
   }
   try {
-    const stats = statPromise(filePath)
-    await unlinkPromise(filePath)
+    const stats = stat(filePath)
+    await unlink(filePath)
   } catch (err) {
     console.error(err.message || err)
   }

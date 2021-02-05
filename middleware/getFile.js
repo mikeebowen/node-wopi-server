@@ -1,9 +1,8 @@
 'use strict'
 
 const { join, parse } = require('path')
-const { readFile, existsSync } = require('fs')
-const { promisify } = require('util')
-const readFilePromise = promisify(readFile)
+const { existsSync } = require('fs')
+const { readFile } = require('fs/promises')
 const { wopiStorageFolder } = require('../config')
 const { fileInfo } = require('../utils/')
 
@@ -11,7 +10,7 @@ module.exports = async (req, res, next) => {
   try {
     const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
-      const file = await readFilePromise(filePath)
+      const file = await readFile(filePath)
       if (fileInfo.info.Version) {
         res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
       }

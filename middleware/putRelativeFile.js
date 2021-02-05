@@ -1,10 +1,8 @@
 'use strict'
 const { parse, join } = require('path')
-const { readdir } = require('fs')
-const { promisify } = require('util')
+const { readDir } = require('fs/promises')
 const { fileInfo, updateFile } = require('../utils')
 const { wopiStorageFolder } = require('../config')
-const readdirPromise = promisify(readdir)
 
 module.exports = async (req, res, next) => {
   const isRelative = req.header('X-WOPI-RelativeTarget')
@@ -24,7 +22,7 @@ module.exports = async (req, res, next) => {
       let newFileName = fileName
       const folderPath = join(parse(process.cwd()).root, wopiStorageFolder)
 
-      const files = await readdirPromise(folderPath)
+      const files = await readDir(folderPath)
       let count = 1
       while (files.includes(newFileName)) {
         newFileName = `v${count}.${fileName}`

@@ -2,10 +2,9 @@
 const { parse } = require('path')
 
 const { join } = require('path')
-const { existsSync, stat } = require('fs')
+const { existsSync } = require('fs')
+const { stat } = require('fs/promises')
 const { userInfo } = require('os')
-const { promisify } = require('util')
-const statPromise = promisify(stat)
 const { wopiStorageFolder } = require('../config')
 const { fileInfo } = require('../utils/')
 
@@ -13,7 +12,7 @@ module.exports = async (req, res, next) => {
   try {
     const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
-      const fileStats = await statPromise(filePath)
+      const fileStats = await stat(filePath)
       // res.send({
       //   BaseFileName: req.params.file_id,
       //   OwnerId: 'documentOwnerId',
