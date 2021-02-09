@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js"></script>
-    <link rel="shortcut icon" href="http://172.17.224.49/wv/resources/1033/FavIcon_Word.ico" />
+    <link rel="shortcut icon" href="http://mikee-oos/wv/resources/1033/FavIcon_Word.ico" />
 
     <style type="text/css">
       body {
@@ -73,7 +73,7 @@
   </head>
   <body>
     <div>
-      <h1>Mike's WOPI Test Page 10/11/2019 build 001 Host: 172.17.224.49</h1>
+      <h1>Mike's WOPI Test Page 10/11/2019 build 001 Host: mikee-oos</h1>
       <p id="demo">language</p>
       <p id="demo_user"></p>
       <p id="demo_browser"></p>
@@ -103,10 +103,10 @@
         id="office_form_vwDoc"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/wv/wordviewerframe.aspx?embed=1?&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest2.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/wv/wordviewerframe.aspx?embed=1?&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="WOPIsrc" value="http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest2.docx" type="hidden" />
+        <input name="WOPIsrc" value="http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest2.docx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -114,10 +114,10 @@
         id="office_form_edDoc"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/we/wordeditorframe.aspx?&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest10.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/we/wordeditorframe.aspx?&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest10.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="WOPIsrc" value="http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest10.docx" type="hidden" />
+        <input name="WOPIsrc" value="http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest10.docx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -126,10 +126,10 @@
         id="office_form_embedDoc"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/wv/wordviewerframe.aspx?embed=1&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest2.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/wv/wordviewerframe.aspx?embed=1&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest2.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="src" value="http://desktop-5h335mh:8888%2fSampleHostPage.html/wopi/files/test2.docx" type="hidden" />
+        <input name="src" value="http://wopi-server:3000%2fSampleHostPage.html/wopi/files/test2.docx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -138,10 +138,10 @@
         id="office_form_cvXls"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/x/_layouts/xlviewerinternal.aspx?WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest1.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/x/_layouts/xlviewerinternal.aspx?WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest1.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="WOPIsrc" value="http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest1.xlsx" type="hidden" />
+        <input name="WOPIsrc" value="http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest1.xlsx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -150,10 +150,10 @@
         id="office_form_cvDoc"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/we/WordConvertAndEdit.aspx?WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2FTest2.doc&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/we/WordConvertAndEdit.aspx?WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2FTest2.doc&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="WOPIsrc" value="http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2FTest2.doc" type="hidden" />
+        <input name="WOPIsrc" value="http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2FTest2.doc" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -162,10 +162,10 @@
         id="office_form_vwXls"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/x/_layouts/xlviewerinternal.aspx?WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest2.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/x/_layouts/xlviewerinternal.aspx?WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest2.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="WOPIsrc" value="http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest2.xlsx" type="hidden" />
+        <input name="WOPIsrc" value="http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest2.xlsx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -174,10 +174,10 @@
         id="office_form_embedXls"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/x/_layouts/xlembed.aspx?&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Ftest1.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/x/_layouts/xlembed.aspx?&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Ftest1.xlsx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="src" value="http://desktop-5h335mh:8888%2fSampleHostPage.html/wopi/files/test1.xlsx" type="hidden" />
+        <input name="src" value="http://wopi-server:3000%2fSampleHostPage.html/wopi/files/test1.xlsx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -186,10 +186,10 @@
         id="office_form_vwPpt"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/p/PowerPointFrame.aspx?PowerPointView=ReadingView?&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2Fppt3.pptx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/p/PowerPointFrame.aspx?PowerPointView=ReadingView?&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2Fppt3.pptx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="src" value="http://desktop-5h335mh:8888%2fSampleHostPage.html/wopi/files/ppt3.pptx" type="hidden" />
+        <input name="src" value="http://wopi-server:3000%2fSampleHostPage.html/wopi/files/ppt3.pptx" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -198,10 +198,10 @@
         id="office_form_vwPdf"
         name="office_form"
         target="office_frame"
-        action="http://172.17.224.49/wv/wordviewerframe.aspx?PdfMode=1&WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2FMS-WOPI.pdf&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
+        action="http://mikee-oos/wv/wordviewerframe.aspx?PdfMode=1&WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2FMS-WOPI.pdf&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0"
         method="post"
       >
-        <input name="src" value="http://desktop-5h335mh:8888%2fSampleHostPage.html/wopi/files/[MS-WOPI].pdf" type="hidden" />
+        <input name="src" value="http://wopi-server:3000%2fSampleHostPage.html/wopi/files/[MS-WOPI].pdf" type="hidden" />
         <input name="access_token" value="DEADBEEFDEADBEEFDEADBEEF" type="hidden" />
         <input name="access_token_ttl" value="0" type="hidden" />
       </form>
@@ -273,7 +273,7 @@
         //	// when using PowerPoint Online's 'view' action.
         //	//office_frame.setAttribute('allowfullscreen', 'true');
 
-        //	office_frame.src = "http://172.17.224.49/wv/wordviewerframe.aspx?WOPISrc=http%3A%2F%2Fdesktop-5h335mh:8888%2Fwopi%2Ffiles%2FTest2.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0";
+        //	office_frame.src = "http://mikee-oos/wv/wordviewerframe.aspx?WOPISrc=http%3A%2F%2Fwopi-server:3000%2Fwopi%2Ffiles%2FTest2.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0";
         //	frameholder.appendChild(office_frame);
 
         //	modal.style.display = "block";

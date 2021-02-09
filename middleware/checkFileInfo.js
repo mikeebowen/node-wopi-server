@@ -12,6 +12,7 @@ module.exports = async (req, res, next) => {
   try {
     const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
+      const { file_id } = req.params
       const fileStats = await stat(filePath)
       // res.send({
       //   BaseFileName: req.params.file_id,
@@ -67,11 +68,15 @@ module.exports = async (req, res, next) => {
         ReadOnly: false,
         UserCanNotWriteRelative: true,
       }
-      Object.keys(info).forEach(k => {
-        if (!Object.hasOwnProperty.call(fileInfo.info, k)) {
-          fileInfo.info[k] = info[k]
-        }
-      })
+      if (fileInfo.info.BaseFileName === file_id) {
+        Object.keys(info).forEach(k => {
+          if (!Object.hasOwnProperty.call(fileInfo.info, k)) {
+            fileInfo.info[k] = info[k]
+          }
+        })
+      } else {
+        fileInfo.info = info
+      }
       res.send(fileInfo.info)
     } else {
       res.status(404).send('file does not exist')
