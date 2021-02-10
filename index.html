@@ -1,45 +1,75 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet" />
+    <style type="text/css">
+      #office_frame {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        border: none;
+        display: block;
+      }
+
+      .w-100 {
+        width: 100%;
+      }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
   </head>
   <body>
     <div id="app">
       <span id="frameholder"></span>
-      <v-app>
+      <v-app v-if="!hideFileList">
         <v-main>
           <v-container>
-            <template>
-              <v-card class="mx-auto" max-width="600" tile>
-                <v-list dense>
-                  <v-subheader>Files</v-subheader>
-                  <v-list-item-group v-model="selectedItem" color="primary">
-                    <v-list-item v-for="(file, i) in files" :key="i">
-                      <v-list-item-icon>
-                        <v-icon>mdi-file-document</v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-content>
-                        <v-list-item-title @click="openFile">{{file.name}}</v-list-item-title>
-                        <template v-for="action in actions[file.ext]">
-                          <form
-                            :id="`office_form_${action[0]}_${file.ext}`"
-                            name="office_form"
-                            target="office_frame"
-                            :action="encodeURI(`${action[1]}?embed=1?&WOPISrc=http://wopi-server:3000/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
-                            method="post"
-                            ref="forms"
-                          ></form>
-                          <v-btn @click="submitForm(`office_form_${action[0]}_${file.ext}`)">{{action[0]}}</v-btn>
-                        </template>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </template>
+            <v-card class="mx-auto" max-width="1500" tile>
+              <v-list dense>
+                <v-subheader>Files</v-subheader>
+                <v-list-item-group v-model="selectedItem" color="primary">
+                  <template v-for="(file, i) in files">
+                    <v-row v-if="Object.keys(actions).includes(file.ext)" :key="i">
+                      <v-col>
+                        <v-list-item>
+                          <v-list-item-icon class="w-100">
+                            <v-icon>{{icon(file.ext)}}</v-icon>
+                          </v-list-item-titl-icon>
+                          <v-list-item-content>
+                            <v-row>
+                              <v-col cols="6">
+                                <v-list-item>{{file.name}}</v-list-item-title>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-btn-toggle>
+                                  <template v-for="action in actions[file.ext]">
+                                    <v-btn @click="submitForm(`office_form_${action[0]}_${file.ext}`)">{{action[0]}}</v-btn>
+                                    <form
+                                      :key="`office_form_${action[0]}_${file.ext}`"
+                                      :id="`office_form_${action[0]}_${file.ext}`"
+                                      name="office_form"
+                                      target="office_frame"
+                                      :action="encodeURI(`${action[1]}?embed=1?&WOPISrc=http://wopi-server:3000/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
+                                      method="post"
+                                    ></form>
+                                  </template>
+                                </v-btn-toggle>
+                              </v-col>
+                            </v-row>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                  </template>
+                </v-list-item-group>
+              </v-list>
+            </v-card>
           </v-container>
         </v-main>
       </v-app>
@@ -56,20 +86,16 @@
             files: [],
             actions: [],
             selectedItem: null,
+            hideFileList: false,
           }
         },
         methods: {
-          openFile(e) {
-            setTimeout(() => {
-              console.log({ selectedItem: this.selectedItem, e })
-            })
-          },
           submitForm(id) {
             var frameholder = document.getElementById('frameholder')
             var office_frame = document.createElement('iframe')
             office_frame.name = 'office_frame'
             office_frame.id = 'office_frame'
-
+            this.hideFileList = true
             // This attribute allows true fullscreen mode in slideshow view
             // when using PowerPoint Online's 'view' action.
             //office_frame.setAttribute('allowfullscreen', 'true');
@@ -78,13 +104,32 @@
 
             document.getElementById(id).submit()
           },
+          icon(ext) {
+            console.log('🚀 ~ file: index.html ~ line 92 ~ icon ~ ext', ext)
+            switch (ext) {
+              case 'docx':
+                return 'mdi-microsoft-word'
+                break
+              case 'xlsx':
+                return 'mdi-microsoft-excel'
+                break
+              case 'pptx':
+                return 'mdi-file-powerpoint'
+                break
+              case 'one':
+                return 'mdi-microsoft-onenote'
+                break
+              default:
+                return 'mdi-file-document-outline'
+                break
+            }
+          },
         },
         async mounted() {
           const res = await fetch('/files')
           const data = await res.json()
           const actionsRes = await fetch('/discovery')
           const actions = await actionsRes.json()
-          console.log('🚀 ~ file: index.html ~ line 61 ~ mounted ~ actions', actions)
           this.actions = actions
           this.files.push(...data)
         },

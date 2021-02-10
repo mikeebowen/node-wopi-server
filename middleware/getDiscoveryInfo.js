@@ -4,7 +4,7 @@ const convert = require('xml-js')
 
 module.exports = async (req, res, next) => {
   const options = {
-    host: process.env.WOPI_HOST,
+    host: process.env.OFFICE_ONLINE_SERVER,
     path: '/hosting/discovery',
   }
 
