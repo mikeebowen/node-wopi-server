@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+  </head>
+  <body>
+    <div id="app">
+      <span id="frameholder"></span>
+      <v-app>
+        <v-main>
+          <v-container>
+            <template>
+              <v-card class="mx-auto" max-width="600" tile>
+                <v-list dense>
+                  <v-subheader>Files</v-subheader>
+                  <v-list-item-group v-model="selectedItem" color="primary">
+                    <v-list-item v-for="(file, i) in files" :key="i">
+                      <v-list-item-icon>
+                        <v-icon>mdi-file-document</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-content>
+                        <v-list-item-title @click="openFile">{{file.name}}</v-list-item-title>
+                        <template v-for="action in actions[file.ext]">
+                          <form
+                            :id="`office_form_${action[0]}_${file.ext}`"
+                            name="office_form"
+                            target="office_frame"
+                            :action="encodeURI(`${action[1]}?embed=1?&WOPISrc=http://wopi-server:3000/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
+                            method="post"
+                            ref="forms"
+                          ></form>
+                          <v-btn @click="submitForm(`office_form_${action[0]}_${file.ext}`)">{{action[0]}}</v-btn>
+                        </template>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list>
+              </v-card>
+            </template>
+          </v-container>
+        </v-main>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data() {
+          return {
+            files: [],
+            actions: [],
+            selectedItem: null,
+          }
+        },
+        methods: {
+          openFile(e) {
+            setTimeout(() => {
+              console.log({ selectedItem: this.selectedItem, e })
+            })
+          },
+          submitForm(id) {
+            var frameholder = document.getElementById('frameholder')
+            var office_frame = document.createElement('iframe')
+            office_frame.name = 'office_frame'
+            office_frame.id = 'office_frame'
+
+            // This attribute allows true fullscreen mode in slideshow view
+            // when using PowerPoint Online's 'view' action.
+            //office_frame.setAttribute('allowfullscreen', 'true');
+
+            frameholder.appendChild(office_frame)
+
+            document.getElementById(id).submit()
+          },
+        },
+        async mounted() {
+          const res = await fetch('/files')
+          const data = await res.json()
+          const actionsRes = await fetch('/discovery')
+          const actions = await actionsRes.json()
+          console.log('🚀 ~ file: index.html ~ line 61 ~ mounted ~ actions', actions)
+          this.actions = actions
+          this.files.push(...data)
+        },
+      })
+    </script>
+  </body>
+</html>

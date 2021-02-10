@@ -24,11 +24,9 @@ module.exports = async (req, res, next) => {
         a.action.forEach(ac => {
           if (process.env.WOPI_IMPLEMENTED.split(',').includes(ac._attributes.name)) {
             if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-              data[ac._attributes.ext] = {
-                [ac._attributes.name]: ac._attributes.urlsrc.split('?')[0],
-              }
+              data[ac._attributes.ext] = [[ac._attributes.name, ac._attributes.urlsrc.split('?')[0]]]
             } else {
-              data[ac._attributes.ext][ac._attributes.name] = ac._attributes.urlsrc.split('?')[0]
+              data[ac._attributes.ext].push([ac._attributes.name, ac._attributes.urlsrc.split('?')[0]])
             }
           }
         })
