@@ -49,10 +49,10 @@
                               <v-col cols="6">
                                 <v-btn-toggle>
                                   <template v-for="action in actions[file.ext]">
-                                    <v-btn @click="submitForm(`office_form_${action[0]}_${file.ext}`)">{{action[0]}}</v-btn>
+                                    <v-btn @click="submitForm(`office_form_${action[0]}_${file.name}`)">{{action[0]}}</v-btn>
                                     <form
-                                      :key="`office_form_${action[0]}_${file.ext}`"
-                                      :id="`office_form_${action[0]}_${file.ext}`"
+                                      :key="`office_form_${action[0]}_${file.name}`"
+                                      :id="`office_form_${action[0]}_${file.name}`"
                                       name="office_form"
                                       target="office_frame"
                                       :action="encodeURI(`${action[1]}?embed=1?&WOPISrc=http://wopi-server:3000/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"

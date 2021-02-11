@@ -10,12 +10,12 @@ const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {
-    const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
+    const {file_id} = req.params
+    const filePath = join(parse(process.cwd()).root, wopiStorageFolder, file_id)
     if (existsSync(filePath)) {
-      const { file_id } = req.params
       const fileStats = await stat(filePath)
       // res.send({
-      //   BaseFileName: req.params.file_id,
+      //   BaseFileName: file_id,
       //   OwnerId: 'documentOwnerId',
       //   UserId: userInfo().username,
       //   Version: fileStats.ctimeMs.toString(),
@@ -45,7 +45,7 @@ module.exports = async (req, res, next) => {
       // })
       // res.status(200).json(fileInfoResponse)
       const info = {
-        BaseFileName: req.params.file_id,
+        BaseFileName: file_id,
         OwnerId: userInfo().uid.toString(),
         Size: fileStats.size,
         UserId: userInfo().username,
