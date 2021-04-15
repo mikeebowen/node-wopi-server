@@ -14,4 +14,5 @@ module.exports = {
   getLock: require('./getLock'),
   deleteFile: require('./deleteFile'),
   getFileNames: require('./getFileNames'),
+  handleHeaders: require('./handleHeaders'),
 }
