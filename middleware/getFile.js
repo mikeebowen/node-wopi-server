@@ -8,7 +8,7 @@ const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {
-    const filePath = join(parse(process.cwd()).root, wopiStorageFolder, req.params.file_id)
+    const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, req.params.file_id)
     if (existsSync(filePath)) {
       const file = await readFile(filePath)
       if (fileInfo.info.Version) {

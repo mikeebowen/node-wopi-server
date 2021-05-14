@@ -10,8 +10,8 @@ const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {
-    const {file_id} = req.params
-    const filePath = join(parse(process.cwd()).root, wopiStorageFolder, file_id)
+    const { file_id } = req.params
+    const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
     if (existsSync(filePath)) {
       const fileStats = await stat(filePath)
       // res.send({
@@ -57,6 +57,7 @@ module.exports = async (req, res, next) => {
         // WebEditingDisabled: false,
         UserCanWrite: true,
         SupportsUpdate: true,
+        SupportsRename: true,
         SupportsCobalt: false,
         // LastModifiedTime: new Date(fileStats.ctimeMs).toISOString(),
         LastModifiedTime: new Date(fileStats.mtime).toISOString(),
@@ -66,7 +67,7 @@ module.exports = async (req, res, next) => {
         BreadcrumbFolderUrl: 'http://localhost:3000',
         BreadcrumbDocName: 'test',
         ReadOnly: false,
-        UserCanNotWriteRelative: true,
+        // UserCanNotWriteRelative: true,
       }
       if (fileInfo.info.BaseFileName === file_id) {
         Object.keys(info).forEach(k => {

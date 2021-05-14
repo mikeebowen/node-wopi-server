@@ -6,7 +6,7 @@ const { wopiStorageFolder } = require('../config')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params
-  const filePath = join(parse(process.cwd()).root, wopiStorageFolder, file_id)
+  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
   if (Object.hasOwnProperty.call(fileInfo.lock, file_id)) {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
     return res.sendStatus(409)

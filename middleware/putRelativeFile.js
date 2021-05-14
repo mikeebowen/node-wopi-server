@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
     try {
       const fileName = isSuggested.startsWith('.') ? fileInfo.info.BaseFileName + isSuggested : isSuggested
       let newFileName = fileName
-      const folderPath = join(parse(process.cwd()).root, wopiStorageFolder)
+      const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
 
       const files = await readDir(folderPath)
       let count = 1
@@ -43,7 +43,7 @@ module.exports = async (req, res, next) => {
   } else {
     try {
       const fileName = isRelative.startsWith('.') ? fileInfo.info.BaseFileName + isRelative : isRelative
-      const folderPath = join(parse(process.cwd()).root, wopiStorageFolder)
+      const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
       const filePath = join(folderPath, fileName)
       const exists = (await readdirPromise(folderPath)).includes(fileName)
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, fileName)

@@ -7,7 +7,7 @@ const { fileInfo, updateFile } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params
-  const filePath = join(parse(process.cwd()).root, wopiStorageFolder, file_id)
+  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
   const lockValue = req.header('X-WOPI-Lock')
 
   if (!existsSync(filePath)) {

@@ -5,8 +5,8 @@ const { readdir } = require('fs/promises')
 const { wopiStorageFolder } = require('../config')
 
 module.exports = async (req, res, next) => {
-  const folderPath = join(parse(process.cwd()).root, wopiStorageFolder)
-  if (existsSync(folderPath)) {
+  const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+  try {
     const files = await readdir(folderPath)
     res.send(
       files.map(f => {
@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
         return { name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext }
       }),
     )
-  } else {
-    res.sendStatud(404)
+  } catch (error) {
+    res.sendStatus(404)
   }
 }
