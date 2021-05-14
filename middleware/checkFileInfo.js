@@ -10,7 +10,7 @@ const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   try {
-    const {file_id} = req.params
+    const { file_id } = req.params
     const filePath = join(parse(process.cwd()).root, wopiStorageFolder, file_id)
     if (existsSync(filePath)) {
       const fileStats = await stat(filePath)

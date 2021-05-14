@@ -7,7 +7,7 @@ module.exports = {
   //   node: '8',
   // },
   extends: ['eslint:recommended'],
-  env: { node: true },
+  env: { node: true, es6: true, es2020: true },
   rules: {
     'no-unused-vars': ['warn', { args: 'none' }],
     'comma-dangle': [

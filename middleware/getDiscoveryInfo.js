@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
   }
 
   const callback = function (response) {
-    var str = ''
+    let str = ''
 
     //another chunk of data has been received, so append it to `str`
     response.on('data', function (chunk) {
