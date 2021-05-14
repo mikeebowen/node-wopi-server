@@ -2,7 +2,6 @@
 const { parse } = require('path')
 
 const { join } = require('path')
-const { existsSync } = require('fs')
 const { stat } = require('fs/promises')
 const { userInfo } = require('os')
 const { wopiStorageFolder } = require('../config')
@@ -66,7 +65,7 @@ module.exports = async (req, res, next) => {
       BreadcrumbBrandUrl: 'http://localhost:3000',
       BreadcrumbFolderName: 'WopiStorage',
       BreadcrumbFolderUrl: 'http://localhost:3000',
-      BreadcrumbDocName: 'test',
+      BreadcrumbDocName: file_id,
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
     }
