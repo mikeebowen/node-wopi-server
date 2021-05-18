@@ -2,7 +2,7 @@
 const { parse, join } = require('path')
 const { readdir } = require('fs/promises')
 const { fileInfo, updateFile } = require('../utils')
-const { wopiStorageFolder } = require('../config')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 
 module.exports = async (req, res, next) => {
   const isRelative = req.header('X-WOPI-RelativeTarget')

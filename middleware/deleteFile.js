@@ -2,7 +2,7 @@
 const { stat, unlink } = require('fs/promises')
 const { join, parse } = require('path')
 const { fileInfo } = require('../utils')
-const { wopiStorageFolder } = require('../config')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params

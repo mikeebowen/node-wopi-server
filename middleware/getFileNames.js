@@ -2,7 +2,7 @@
 const { join, parse, extname } = require('path')
 const { existsSync } = require('fs')
 const { readdir } = require('fs/promises')
-const { wopiStorageFolder } = require('../config')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 
 module.exports = async (req, res, next) => {
   const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)

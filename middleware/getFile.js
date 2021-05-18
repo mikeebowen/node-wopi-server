@@ -3,7 +3,7 @@
 const { join, parse } = require('path')
 const { existsSync } = require('fs')
 const { readFile } = require('fs/promises')
-const { wopiStorageFolder } = require('../config')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 const { fileInfo } = require('../utils/')
 
 module.exports = async (req, res, next) => {

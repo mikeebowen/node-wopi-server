@@ -1,12 +1,12 @@
 'use strict'
 
+require('dotenv').config()
 const { join } = require('path')
 const express = require('express')
 const app = express()
 const router = express.Router()
 const { getDiscoveryInfo, getFile, checkFileInfo, putFile, getRawBody, checkAccess, getFileNames, handleHeaders } = require('./middleware')
 const port = process.env.PORT || 3000
-require('dotenv').config()
 
 app.use(getRawBody) // adds the raw binary of the post body to req.rawBody
 // app.get('*', getDiscoveryInfo)
