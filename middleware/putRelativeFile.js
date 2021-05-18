@@ -37,6 +37,7 @@ module.exports = async (req, res, next) => {
       return res.send(data)
     } catch (err) {
       console.error(err.message || err)
+      throw new Error(err.message || err)
     }
   } else {
     try {
@@ -63,6 +64,7 @@ module.exports = async (req, res, next) => {
       })
     } catch (err) {
       console.error(err.message || err)
+      throw new Error(err.message || err)
     }
   }
 }
