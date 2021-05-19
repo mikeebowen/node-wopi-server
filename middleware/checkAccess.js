@@ -6,6 +6,6 @@ module.exports = (req, res, next) => {
   if (token && token.toLowerCase() !== 'invalid') {
     next()
   } else {
-    res.status(401).send('Invalid Token')
+    return res.status(401).send('Invalid Token')
   }
 }

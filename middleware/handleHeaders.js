@@ -33,7 +33,6 @@ module.exports = (req, res, next) => {
       break
     default:
       res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
-      res.sendStatus(409)
-      break
+      return res.sendStatus(409)
   }
 }

@@ -18,6 +18,5 @@ module.exports = async function updateFile(filePath, rawBody, updateVersion) {
     return time
   } catch (err) {
     console.error(err.message || err)
-    throw new Error(err.message || err)
   }
 }

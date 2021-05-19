@@ -81,6 +81,6 @@ module.exports = async (req, res, next) => {
     res.send(fileInfo.info)
   } catch (err) {
     console.error(err.message || err)
-    res.status(404)
+    return res.status(404)
   }
 }

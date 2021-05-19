@@ -1,5 +1,5 @@
 'use strict'
-const { stat, unlink } = require('fs/promises')
+const { unlink } = require('fs/promises')
 const { join, parse } = require('path')
 const { fileInfo } = require('../utils')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
@@ -12,9 +12,10 @@ module.exports = async (req, res, next) => {
     return res.sendStatus(409)
   }
   try {
-    const stats = stat(filePath)
     await unlink(filePath)
+    return res.sendStatus(200)
   } catch (err) {
     console.error(err.message || err)
+    return res.sendStatus(500)
   }
 }

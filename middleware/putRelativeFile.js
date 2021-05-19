@@ -28,7 +28,7 @@ module.exports = async (req, res, next) => {
       const filePath = join(folderPath, newFileName)
       await updateFile(filePath, req.rawBody, true)
       // res.status(200)
-      const myUrl = new URL(`http://dev-machine:3000/wopi/files/${newFileName}`)
+      const myUrl = new URL(`http://localhost:3000/wopi/files/${newFileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
       const data = JSON.stringify({
         Name: newFileName,
@@ -37,7 +37,7 @@ module.exports = async (req, res, next) => {
       return res.send(data)
     } catch (err) {
       console.error(err.message || err)
-      throw new Error(err.message || err)
+      return res.sendStatus(500)
     }
   } else {
     try {
@@ -56,7 +56,7 @@ module.exports = async (req, res, next) => {
         }
         res.status(409)
       }
-      const myUrl = new URL(`http://dev-machine:3000/wopi/files/${fileName}`)
+      const myUrl = new URL(`http://localhost:3000/wopi/files/${fileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
       return res.json({
         Name: fileName,
@@ -64,7 +64,7 @@ module.exports = async (req, res, next) => {
       })
     } catch (err) {
       console.error(err.message || err)
-      throw new Error(err.message || err)
+      return res.sendStatus(500)
     }
   }
 }

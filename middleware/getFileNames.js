@@ -1,6 +1,5 @@
 'use strict'
 const { join, parse, extname } = require('path')
-const { existsSync } = require('fs')
 const { readdir } = require('fs/promises')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 
@@ -15,6 +14,6 @@ module.exports = async (req, res, next) => {
       }),
     )
   } catch (error) {
-    res.sendStatus(404)
+    return res.sendStatus(404)
   }
 }
