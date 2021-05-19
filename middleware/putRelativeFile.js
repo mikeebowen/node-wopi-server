@@ -47,7 +47,7 @@ module.exports = async (req, res, next) => {
       const exists = (await readdir(folderPath)).includes(fileName)
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, fileName)
 
-      if (overwrite || !exists) {
+      if (overwrite && !exists) {
         await updateFile(filePath, req.rawBody, false)
         res.status(200)
       } else {
