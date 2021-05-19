@@ -5,7 +5,7 @@ const fileInfo = require('./fileInfo')
 
 module.exports = async function updateFile(filePath, rawBody, updateVersion) {
   try {
-    if (!existsSync(fileInfo)) {
+    if (!existsSync(filePath)) {
       await writeFile(filePath, new Uint8Array(Buffer.from('')))
     }
     const wStream = createWriteStream(filePath)
@@ -18,5 +18,6 @@ module.exports = async function updateFile(filePath, rawBody, updateVersion) {
     return time
   } catch (err) {
     console.error(err.message || err)
+    return 0
   }
 }
