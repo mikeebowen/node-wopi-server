@@ -6,6 +6,7 @@ const validFileName = require('valid-filename')
 const { fileInfo, updateFile, getWopiMethods } = require('../utils')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 const { WOPI_SERVER } = process.env
+
 module.exports = async (req, res, next) => {
   const isRelative = req.header('X-WOPI-RelativeTarget')
   const isSuggested = req.header('X-WOPI-SuggestedTarget')
@@ -38,9 +39,6 @@ module.exports = async (req, res, next) => {
 
       await updateFile(filePath, req.rawBody, true)
       const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName)
-
-      res.setHeader('HostViewUrl', hostViewUrl.href)
-      res.setHeader('HostEditUrl', hostEditUrl.href)
 
       return res.json({
         Name: newFileName,
@@ -75,9 +73,6 @@ module.exports = async (req, res, next) => {
         res.status(409)
       }
       const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName)
-
-      res.setHeader('HostViewUrl', hostViewUrl.href)
-      res.setHeader('HostEditUrl', hostEditUrl.href)
 
       return res.json({
         Name: newFileName,
