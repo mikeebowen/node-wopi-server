@@ -1,9 +1,9 @@
 'use strict'
-const { parse, join } = require('path')
+const { parse, join, extname } = require('path')
 const { readdir } = require('fs/promises')
 const { decode } = require('utf7')
 const validFileName = require('valid-filename')
-const { fileInfo, updateFile } = require('../utils')
+const { fileInfo, updateFile, getWopiMethods } = require('../utils')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 const { WOPI_SERVER } = process.env
 module.exports = async (req, res, next) => {
@@ -37,13 +37,16 @@ module.exports = async (req, res, next) => {
       const filePath = join(folderPath, newFileName)
 
       await updateFile(filePath, req.rawBody, true)
+      const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName)
 
-      const myUrl = new URL(`${WOPI_SERVER}/wopi/files/${newFileName}`)
-      myUrl.searchParams.append('access_token', 'myVerySecretToken')
+      res.setHeader('HostViewUrl', hostViewUrl.href)
+      res.setHeader('HostEditUrl', hostEditUrl.href)
 
       return res.json({
         Name: newFileName,
-        Url: myUrl.href,
+        Url: actionUrl.href,
+        HostEditUrl: hostEditUrl.href,
+        HostViewUrl: hostViewUrl.href,
       })
     } catch (err) {
       console.error(err.message || err)
@@ -71,17 +74,41 @@ module.exports = async (req, res, next) => {
         }
         res.status(409)
       }
+      const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName)
 
-      const myUrl = new URL(`${WOPI_SERVER}/wopi/files/${newFileName}`)
-      myUrl.searchParams.append('access_token', 'myVerySecretToken')
+      res.setHeader('HostViewUrl', hostViewUrl.href)
+      res.setHeader('HostEditUrl', hostEditUrl.href)
 
       return res.json({
         Name: newFileName,
-        Url: myUrl.href,
+        Url: actionUrl.href,
+        HostEditUrl: hostEditUrl.href,
+        HostViewUrl: hostViewUrl.href,
       })
     } catch (err) {
       console.error(err.message || err)
       return res.sendStatus(500)
     }
   }
+}
+
+const getUrls = async newFileName => {
+  const actionUrl = new URL(`${WOPI_SERVER}/wopi/files/${newFileName}`)
+  actionUrl.searchParams.append('access_token', 'myVerySecretToken')
+  const urls = await getWopiMethods()
+  const ext = extname(newFileName).replace('.', '')
+  const viewActionUrl = Object.hasOwnProperty.call(urls, ext)
+    ? urls[ext].filter(u => u[0] === 'view')[0][1]
+    : urls.undefined.filter(u => u[0] === 'view')[0][1]
+  const hostViewUrl = new URL(viewActionUrl)
+  hostViewUrl.searchParams.append('embed', '1')
+  hostViewUrl.searchParams.append('WOPISrc', actionUrl.href)
+
+  const editActionUrl = Object.hasOwnProperty.call(urls, ext)
+    ? urls[ext].filter(u => u[0] === 'edit')[0][1]
+    : urls.undefined.filter(u => u[0] === 'edit')[0][1]
+  const hostEditUrl = new URL(editActionUrl)
+  hostEditUrl.searchParams.append('embed', '1')
+  hostEditUrl.searchParams.append('WOPISrc', actionUrl.href)
+  return { actionUrl, hostViewUrl, hostEditUrl }
 }

@@ -1,40 +1,7 @@
 'use strict'
-const http = require('http')
-const convert = require('xml-js')
+const { getWopiMethods } = require('../utils')
 
 module.exports = async (req, res, next) => {
-  const options = {
-    host: process.env.OFFICE_ONLINE_SERVER,
-    path: '/hosting/discovery',
-  }
-
-  const callback = function (response) {
-    let str = ''
-
-    //another chunk of data has been received, so append it to `str`
-    response.on('data', function (chunk) {
-      str += chunk
-    })
-
-    //the whole response has been received, so respond
-    response.on('end', function () {
-      const json = convert.xml2js(str, { compact: true, spaces: 2 })
-      const data = {}
-      json['wopi-discovery']['net-zone'].app.forEach(a => {
-        a.action.forEach(ac => {
-          if (process.env.WOPI_IMPLEMENTED.split(',').includes(ac._attributes.name)) {
-            if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-              data[ac._attributes.ext] = [[ac._attributes.name, ac._attributes.urlsrc.split('?')[0]]]
-            } else {
-              data[ac._attributes.ext].push([ac._attributes.name, ac._attributes.urlsrc.split('?')[0]])
-            }
-          }
-        })
-      })
-
-      res.send(data)
-    })
-  }
-
-  http.request(options, callback).end()
+  const data = await getWopiMethods()
+  res.send(data)
 }
