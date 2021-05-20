@@ -5,7 +5,7 @@ const { decode } = require('utf7')
 const validFileName = require('valid-filename')
 const { fileInfo, updateFile } = require('../utils')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
-
+const { WOPI_SERVER } = process.env
 module.exports = async (req, res, next) => {
   const isRelative = req.header('X-WOPI-RelativeTarget')
   const isSuggested = req.header('X-WOPI-SuggestedTarget')
@@ -38,7 +38,7 @@ module.exports = async (req, res, next) => {
 
       await updateFile(filePath, req.rawBody, true)
 
-      const myUrl = new URL(`http://localhost:3000/wopi/files/${newFileName}`)
+      const myUrl = new URL(`${WOPI_SERVER}/wopi/files/${newFileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
 
       return res.json({
@@ -72,7 +72,7 @@ module.exports = async (req, res, next) => {
         res.status(409)
       }
 
-      const myUrl = new URL(`http://localhost:3000/wopi/files/${newFileName}`)
+      const myUrl = new URL(`${WOPI_SERVER}/wopi/files/${newFileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
 
       return res.json({

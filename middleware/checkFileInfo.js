@@ -6,6 +6,7 @@ const { stat } = require('fs/promises')
 const { userInfo } = require('os')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 const { fileInfo } = require('../utils/')
+const { WOPI_SERVER } = process.env
 
 module.exports = async (req, res, next) => {
   let fileStats
@@ -88,9 +89,9 @@ module.exports = async (req, res, next) => {
       // LastModifiedTime: new Date(),
       LastModifiedTime: new Date(fileStats.mtime).toISOString(),
       BreadcrumbBrandName: 'LocalStorage WOPI Host',
-      BreadcrumbBrandUrl: 'http://localhost:3000',
+      BreadcrumbBrandUrl: WOPI_SERVER,
       BreadcrumbFolderName: 'WopiStorage',
-      BreadcrumbFolderUrl: 'http://localhost:3000',
+      BreadcrumbFolderUrl: WOPI_SERVER,
       BreadcrumbDocName: file_id,
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
