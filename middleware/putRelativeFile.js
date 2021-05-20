@@ -21,22 +21,25 @@ module.exports = async (req, res, next) => {
       const decodedFileName = decode(fileName)
       let newFileName = decodedFileName
       const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
-
       const files = await readdir(folderPath)
       let count = 1
+
       while (files.includes(newFileName)) {
         newFileName = `v${count}.${decodedFileName}`
         count++
       }
+
       const filePath = join(folderPath, newFileName)
+
       await updateFile(filePath, req.rawBody, true)
+
       const myUrl = new URL(`http://localhost:3000/wopi/files/${newFileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
-      const data = JSON.stringify({
+
+      return res.json({
         Name: newFileName,
         Url: myUrl.href,
       })
-      return res.send(data)
     } catch (err) {
       console.error(err.message || err)
       return res.sendStatus(500)
@@ -51,16 +54,18 @@ module.exports = async (req, res, next) => {
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, newFileName)
 
       if (overwrite || !exists) {
-        await updateFile(filePath, req.rawBody, false)
-        res.status(200)
+        const success = await updateFile(filePath, req.rawBody, false)
+        res.status(success ? 200 : 409)
       } else {
         if (isLocked) {
           res.setHeader('X-WOPI-Lock', fileInfo.lock[newFileName] || '')
         }
         res.status(409)
       }
+
       const myUrl = new URL(`http://localhost:3000/wopi/files/${newFileName}`)
       myUrl.searchParams.append('access_token', 'myVerySecretToken')
+
       return res.json({
         Name: newFileName,
         Url: myUrl.href,
