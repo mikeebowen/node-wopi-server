@@ -15,6 +15,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "utf7": "^1.0.2",
+    "valid-filename": "^3.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@
 const { parse, join } = require('path')
 const { readdir } = require('fs/promises')
 const { decode } = require('utf7')
+const validFileName = require('valid-filename')
 const { fileInfo, updateFile } = require('../utils')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
 
@@ -12,7 +13,7 @@ module.exports = async (req, res, next) => {
   const overwrite = (overwriteHeader && overwriteHeader.toLowerCase() === 'true') || false
 
   if (!!isRelative === !!isSuggested) {
-    return res.sendStatus(501)
+    return res.sendStatus(400)
   }
 
   if (isSuggested) {
@@ -27,6 +28,10 @@ module.exports = async (req, res, next) => {
       while (files.includes(newFileName)) {
         newFileName = `v${count}.${decodedFileName}`
         count++
+      }
+
+      if (!validFileName(newFileName)) {
+        return res.sendStatus(400)
       }
 
       const filePath = join(folderPath, newFileName)
@@ -52,6 +57,10 @@ module.exports = async (req, res, next) => {
       const filePath = join(folderPath, newFileName)
       const exists = (await readdir(folderPath)).includes(newFileName)
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, newFileName)
+
+      if (!validFileName(newFileName)) {
+        return res.sendStatus(400)
+      }
 
       if (overwrite || !exists) {
         const success = await updateFile(filePath, req.rawBody, false)
