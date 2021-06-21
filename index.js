@@ -14,7 +14,7 @@ router.route('/files/:file_id/contents').get(getFile).post(putFile)
 router.route('/files/:file_id').get(checkFileInfo).post(handleHeaders)
 app.use('/wopi', checkAccess)
 app.use('/wopi', router)
-app.get('/files', getFileNames)
+app.get('/fileNames', getFileNames)
 app.get('/discovery', getDiscoveryInfo)
 app.get('/', (req, res, next) => {
   // res.sendFile(join(__dirname, 'SampleHostPage.html'))
