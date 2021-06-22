@@ -11,8 +11,8 @@ const { WOPI_SERVER } = process.env
 module.exports = async (req, res, next) => {
   let fileStats
   const { file_id } = req.params
+  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
   try {
-    const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
     fileStats = await stat(filePath)
   } catch (err) {
     fileStats = {
@@ -67,6 +67,7 @@ module.exports = async (req, res, next) => {
     //   'https://microsoft-my.sharepoint.com/:w:/r/personal/mibowe_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B55C14245-7FA9-40E1-9695-9C8E5E3D364C%7D&file=test.docx&action=default&mobileredirect=true',
     // })
     // res.status(200).json(fileInfoResponse)
+
     const info = {
       BaseFileName: file_id,
       OwnerId: userInfo().uid.toString(),
@@ -95,6 +96,7 @@ module.exports = async (req, res, next) => {
       BreadcrumbDocName: file_id,
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
+      ClientUrl: `file:///${filePath}`,
     }
     if (fileInfo.info.BaseFileName === file_id) {
       Object.keys(info).forEach(k => {
