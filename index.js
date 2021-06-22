@@ -20,6 +20,10 @@ app.get('/', (req, res, next) => {
   // res.sendFile(join(__dirname, 'SampleHostPage.html'))
   res.sendFile(join(__dirname, 'index.html'))
 })
+app.get('/case', (req, res, next) => {
+  // res.sendFile(join(__dirname, 'SampleHostPage.html'))
+  res.sendFile(join(__dirname, 'Load_iframe.html'))
+})
 app.listen(port, () => {
   console.log(`server running on port ${port}`)
 })
