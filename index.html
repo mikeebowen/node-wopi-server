@@ -92,7 +92,7 @@
         submitForm(id) {
           const frameholder = document.getElementById('frameholder')
           const office_frame = document.createElement('iframe')
-          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin'
+          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups'
           office_frame.name = 'office_frame'
           office_frame.id = 'office_frame'
           this.hideFileList = true
