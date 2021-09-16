@@ -2,7 +2,7 @@
 const { join, parse } = require('path')
 const { existsSync } = require('fs')
 const { stat } = require('fs/promises')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { fileInfo, updateFile } = require('../utils/')
 
 module.exports = async (req, res, next) => {

@@ -4,7 +4,7 @@ const { parse } = require('path')
 const { join } = require('path')
 const { stat } = require('fs/promises')
 const { userInfo } = require('os')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { fileInfo } = require('../utils/')
 const { WOPI_SERVER } = process.env
 

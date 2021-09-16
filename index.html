@@ -27,53 +27,51 @@
 </head>
 
 <body>
-  <div id="app">
-    <span id="frameholder"></span>
-    <v-app v-if="!hideFileList">
-      <v-main>
-        <v-container>
-          <v-card class="mx-auto" max-width="1500" tile>
-            <v-list dense>
-              <v-subheader>Files</v-subheader>
-              <v-list-item-group v-model="selectedItem" color="primary">
-                <template v-for="(file, i) in files">
-                  <v-row v-if="Object.keys(actions).includes(file.ext)" :key="i">
-                    <v-col>
-                      <v-list-item>
-                        <v-list-item-icon class="w-100">
-                          <v-icon>{{icon(file.ext)}}</v-icon>
-                          </v-list-item-titl-icon>
-                          <v-list-item-content>
-                            <v-row>
-                              <v-col cols="6">
-                                <v-list-item>{{file.name}}</v-list-item-title>
-                              </v-col>
-                              <v-col cols="6">
-                                <v-btn-toggle>
-                                  <template v-for="action in actions[file.ext]">
-                                    <v-btn @click="submitForm(`office_form_${action[0]}_${file.name}`)">{{action[0]}}
-                                    </v-btn>
-                                    <form :key="`office_form_${action[0]}_${file.name}`"
-                                      :id="`office_form_${action[0]}_${file.name}`" name="office_form"
-                                      target="office_frame"
-                                      :action="encodeURI(`${action[1]}?embed=1?&WOPISrc=${wopiServer}/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
-                                      method="post"></form>
-                                  </template>
-                                </v-btn-toggle>
-                              </v-col>
-                            </v-row>
-                          </v-list-item-content>
-                      </v-list-item>
-                    </v-col>
-                  </v-row>
-                </template>
-              </v-list-item-group>
-            </v-list>
-          </v-card>
-        </v-container>
-      </v-main>
-    </v-app>
-  </div>
+  <span id="frameholder"></span>
+  <v-app v-if="!hideFileList" id="app">
+    <v-main>
+      <v-container>
+        <v-card class="mx-auto" max-width="1500" tile>
+          <v-list dense>
+            <v-subheader>Files</v-subheader>
+            <v-list-item-group v-model="selectedItem" color="primary">
+              <template v-for="(file, i) in files">
+                <v-row v-if="Object.keys(actions).includes(file.ext)" :key="i">
+                  <v-col>
+                    <v-list-item>
+                      <v-list-item-icon class="w-100">
+                        <v-icon>{{icon(file.ext)}}</v-icon>
+                        </v-list-item-titl-icon>
+                        <v-list-item-content>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-list-item>{{file.name}}</v-list-item-title>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-btn-toggle>
+                                <template v-for="action in actions[file.ext]">
+                                  <v-btn @click="submitForm(`office_form_${action[0]}_${file.name}`)">{{action[0]}}
+                                  </v-btn>
+                                  <form :key="`office_form_${action[0]}_${file.name}`"
+                                    :id="`office_form_${action[0]}_${file.name}`" name="office_form"
+                                    target="office_frame"
+                                    :action="encodeURI(`${action[1]}?embed=1?taco=cat&WOPISrc=${wopiServer}/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0&wdFoo=bar`)"
+                                    method="post"></form>
+                                </template>
+                              </v-btn-toggle>
+                            </v-col>
+                          </v-row>
+                        </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                </v-row>
+              </template>
+            </v-list-item-group>
+          </v-list>
+        </v-card>
+      </v-container>
+    </v-main>
+  </v-app>
 
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>

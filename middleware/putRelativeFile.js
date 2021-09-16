@@ -4,7 +4,7 @@ const { readdir } = require('fs/promises')
 const { decode } = require('utf7')
 const validFileName = require('valid-filename')
 const { fileInfo, updateFile, getWopiMethods } = require('../utils')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split(',')
+const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { WOPI_SERVER } = process.env
 
 module.exports = async (req, res, next) => {
