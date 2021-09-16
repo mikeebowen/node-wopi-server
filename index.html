@@ -33,8 +33,22 @@
       <v-container>
         <v-card class="mx-auto" max-width="1500" tile>
           <v-list dense>
-            <v-subheader>Files</v-subheader>
             <v-list-item-group v-model="selectedItem" color="primary">
+              <v-row>
+                <v-col cols="2" offset="9">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-btn @click="editNew()">New
+                      </v-btn>
+                      <form
+                        :id="create_new" name="office_form"
+                        target="office_frame"
+                        method="post"></form>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-col>
+              </v-row>
+              <v-subheader>Files</v-subheader>
               <template v-for="(file, i) in files">
                 <v-row v-if="Object.keys(actions).includes(file.ext)" :key="i">
                   <v-col>
@@ -49,13 +63,13 @@
                             </v-col>
                             <v-col cols="6">
                               <v-btn-toggle>
-                                <template v-for="action in actions[file.ext]">
+                                <template v-for="action in actions[file.ext]" v-if="action[0] !== 'editnew'">
                                   <v-btn @click="submitForm(`office_form_${action[0]}_${file.name}`)">{{action[0]}}
                                   </v-btn>
                                   <form :key="`office_form_${action[0]}_${file.name}`"
                                     :id="`office_form_${action[0]}_${file.name}`" name="office_form"
                                     target="office_frame"
-                                    :action="encodeURI(`${action[1]}?embed=1?taco=cat&WOPISrc=${wopiServer}/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0&wdFoo=bar`)"
+                                    :action="encodeURI(`${action[1]}?embed=1?WOPISrc=${wopiServer}/wopi/files/${file.name}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
                                     method="post"></form>
                                 </template>
                               </v-btn-toggle>
@@ -90,17 +104,7 @@
       },
       methods: {
         submitForm(id) {
-          const frameholder = document.getElementById('frameholder')
-          const office_frame = document.createElement('iframe')
-          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups'
-          office_frame.name = 'office_frame'
-          office_frame.id = 'office_frame'
-          this.hideFileList = true
-          // This attribute allows true fullscreen mode in slideshow view
-          // when using PowerPoint Online's 'view' action.
-          //office_frame.setAttribute('allowfullscreen', 'true');
-
-          frameholder.appendChild(office_frame)
+         this.createIframe()
 
           document.getElementById(id).submit()
         },
@@ -123,6 +127,26 @@
               break
           }
         },
+        editNew() {
+          // :action="encodeURI(`actions[xlsx].find(x => x[0] === 'editnew')[1]?embed=1?WOPISrc=http://dev-machine:3000/wopi/files/blah.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
+          this.createIframe()
+
+          const form = document.getElementById('create_new')
+          form.action = encodeURI(`${this.actions['xlsx'].find(x => x[0] === 'editnew')[1]}?embed=1?WOPISrc=http://dev-machine:3000/wopi/files/blah.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)
+        },
+        createIframe() {
+          const frameholder = document.getElementById('frameholder')
+          const office_frame = document.createElement('iframe')
+          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups'
+          office_frame.name = 'office_frame'
+          office_frame.id = 'office_frame'
+          this.hideFileList = true
+          // This attribute allows true fullscreen mode in slideshow view
+          // when using PowerPoint Online's 'view' action.
+          //office_frame.setAttribute('allowfullscreen', 'true');
+
+          frameholder.appendChild(office_frame)
+        }
       },
       async mounted() {
         const res = await fetch('/fileNames')
