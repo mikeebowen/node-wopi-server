@@ -1,4 +1,4 @@
-# NodeJs WOPI Server
+# Node.js WOPI Server
 
 This is a sample implementation of the [WOPI Protocol](https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b) written with Node.js.This is not a complete implementation, but is meant to be a example for implementers to use to get started or for reference.
 
