@@ -27,17 +27,20 @@ module.exports = async () => {
       response.on('end', function () {
         const json = convert.xml2js(str, { compact: true, spaces: 2 })
         const data = {}
-        json['wopi-discovery']['net-zone'].app.forEach(a => {
-          a.action.forEach(ac => {
-            if (process.env.WOPI_IMPLEMENTED.split(',').includes(ac._attributes.name)) {
-              if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-                data[ac._attributes.ext] = [[ac._attributes.name, ac._attributes.urlsrc.split('?')[0]]]
-              } else {
-                data[ac._attributes.ext].push([ac._attributes.name, ac._attributes.urlsrc.split('?')[0]])
+        const implemented = process.env.WOPI_IMPLEMENTED.split(',')
+        json['wopi-discovery']['net-zone']
+          .find(n => n._attributes.name === 'internal-http')
+          .app.forEach(a => {
+            a.action.forEach(ac => {
+              if (implemented.includes(ac._attributes.name)) {
+                if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
+                  data[ac._attributes.ext] = [[ac._attributes.name, ac._attributes.urlsrc.split('?')[0]]]
+                } else {
+                  data[ac._attributes.ext].push([ac._attributes.name, ac._attributes.urlsrc.split('?')[0]])
+                }
               }
-            }
+            })
           })
-        })
 
         resolve(data)
       })
