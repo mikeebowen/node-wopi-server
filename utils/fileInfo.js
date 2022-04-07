@@ -23,6 +23,7 @@ const fileInfo = {
     'pptm',
     'potm',
     'ppsm',
+    'pdf',
   ],
 }
 Object.seal(fileInfo)

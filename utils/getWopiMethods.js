@@ -33,10 +33,14 @@ module.exports = async () => {
           .app.forEach(a => {
             a.action.forEach(ac => {
               if (implemented.includes(ac._attributes.name)) {
+                const name = ac._attributes.name
+                const splitUrl = ac._attributes.urlsrc.split('?')
+                const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '')
+
                 if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-                  data[ac._attributes.ext] = [[ac._attributes.name, ac._attributes.urlsrc.split('?')[0]]]
+                  data[ac._attributes.ext] = [[name, `${splitUrl[0]}?${queryParams}`]]
                 } else {
-                  data[ac._attributes.ext].push([ac._attributes.name, ac._attributes.urlsrc.split('?')[0]])
+                  data[ac._attributes.ext].push([name, `${splitUrl[0]}?${queryParams}`])
                 }
               }
             })
