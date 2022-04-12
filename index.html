@@ -69,7 +69,7 @@
                                   <form :key="`office_form_${action[0]}_${file.name}`"
                                     :id="`office_form_${action[0]}_${file.name}`" name="office_form"
                                     target="office_frame"
-                                    :action="`${action[1]}?&WOPISrc=` + encodeURIComponent(`${wopiServer}/wopi/files/${file.name}`) + '&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0'"
+                                    :action="`${action[1]}${action[1].endsWith('?') ? '' : '&'}WOPISrc=` + encodeURIComponent(`${wopiServer}/wopi/files/${file.name}`) + '&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0'"
                                     method="post"></form>
                                 </template>
                               </v-btn-toggle>
