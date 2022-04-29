@@ -28,23 +28,21 @@ module.exports = async () => {
         const json = convert.xml2js(str, { compact: true, spaces: 2 })
         const data = {}
         const implemented = process.env.WOPI_IMPLEMENTED.split(',')
-        json['wopi-discovery']['net-zone']
-          .find(n => n._attributes.name === 'internal-http')
-          .app.forEach(a => {
-            a.action.forEach(ac => {
-              if (implemented.includes(ac._attributes.name)) {
-                const name = ac._attributes.name
-                const splitUrl = ac._attributes.urlsrc.split('?')
-                const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '')
+        json['wopi-discovery']['net-zone'].app.forEach(a => {
+          a.action.forEach(ac => {
+            if (implemented.includes(ac._attributes.name)) {
+              const name = ac._attributes.name
+              const splitUrl = ac._attributes.urlsrc.split('?')
+              const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '')
 
-                if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-                  data[ac._attributes.ext] = [[name, `${splitUrl[0]}?${queryParams}`]]
-                } else {
-                  data[ac._attributes.ext].push([name, `${splitUrl[0]}?${queryParams}`])
-                }
+              if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
+                data[ac._attributes.ext] = [[name, `${splitUrl[0]}?${queryParams}`]]
+              } else {
+                data[ac._attributes.ext].push([name, `${splitUrl[0]}?${queryParams}`])
               }
-            })
+            }
           })
+        })
 
         resolve(data)
       })
