@@ -5,7 +5,17 @@ const { join } = require('path')
 const express = require('express')
 const app = express()
 const router = express.Router()
-const { getDiscoveryInfo, getFile, checkFileInfo, putFile, getRawBody, checkAccess, getFileNames, handleHeaders } = require('./middleware')
+const {
+  getDiscoveryInfo,
+  getFile,
+  checkFileInfo,
+  putFile,
+  getRawBody,
+  checkAccess,
+  getFileNames,
+  handleHeaders,
+  createEmptyFile,
+} = require('./middleware')
 const { createServer } = require('https')
 const { readFileSync } = require('fs')
 const port = process.env.PORT || 3000
@@ -22,6 +32,7 @@ router.route('/files/:file_id/contents').get(getFile).post(putFile)
 router.route('/files/:file_id').get(checkFileInfo).post(handleHeaders)
 app.use('/wopi', checkAccess)
 app.use('/wopi', router)
+app.post('/create/:file_id', createEmptyFile)
 app.get('/fileNames', getFileNames)
 app.get('/discovery', getDiscoveryInfo)
 app.get('/', (req, res, next) => {

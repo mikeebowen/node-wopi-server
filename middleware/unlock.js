@@ -8,6 +8,7 @@ module.exports = (req, res, next) => {
   if (!lockValue) {
     return res.sendStatus(400)
   }
+
   const { file_id } = req.params
 
   if (!Object.hasOwnProperty.call(fileInfo.lock, file_id) || fileInfo.lock[file_id] !== lockValue) {

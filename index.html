@@ -40,10 +40,7 @@
                     <v-list-item-content>
                       <v-btn @click="editNew()">New
                       </v-btn>
-                      <form
-                        :id="create_new" name="office_form"
-                        target="office_frame"
-                        method="post"></form>
+                      <form id="create_new" name="office_form" target="office_frame" method="post"></form>
                     </v-list-item-content>
                   </v-list-item>
                 </v-col>
@@ -101,62 +98,87 @@
           wopiServer: '',
           selectedItem: null,
           hideFileList: false,
-        }
+        };
       },
       methods: {
         submitForm(id) {
-         this.createIframe()
+          this.createIframe();
 
-          document.getElementById(id).submit()
+          document.getElementById(id).submit();
         },
         icon(ext) {
           switch (ext) {
             case 'docx':
-              return 'mdi-microsoft-word'
-              break
+              return 'mdi-microsoft-word';
+              break;
             case 'xlsx':
-              return 'mdi-microsoft-excel'
-              break
+              return 'mdi-microsoft-excel';
+              break;
             case 'pptx':
-              return 'mdi-file-powerpoint'
-              break
+              return 'mdi-file-powerpoint';
+              break;
             case 'one':
-              return 'mdi-microsoft-onenote'
-              break
+              return 'mdi-microsoft-onenote';
+              break;
             default:
-              return 'mdi-file-document-outline'
-              break
+              return 'mdi-file-document-outline';
+              break;
           }
         },
-        editNew() {
-          // :action="encodeURI(`actions[xlsx].find(x => x[0] === 'editnew')[1]?embed=1?WOPISrc=http://dev-machine:3000/wopi/files/blah.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)"
-          this.createIframe()
+        async editNew() {
+          try {
+            const name = window.prompt('Choose new file name');
+            const ext = name.slice(-4);
 
-          const form = document.getElementById('create_new')
-          form.action = encodeURI(`${this.actions['xlsx'].find(x => x[0] === 'editnew')[1]}?embed=1?WOPISrc=http://dev-machine:3000/wopi/files/blah.docx&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`)
+            if (!['docx', 'xlsx', 'pptx'].includes(ext)) {
+              return window.alert('Filename must have one of these extensions ".docx", ".xlsx". or ".pptx"');
+            }
+
+            if (this.files.map(t => t.name).includes(name)) {
+              return alert('Filename already exists');
+            }
+
+            await fetch(`/create/${name}`, {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({})
+            });
+
+            const form = document.getElementById('create_new');
+            const action = this.actions[ext].find(x => x[0] === 'editnew')[1];
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`http://mikeesoft.local:3000/wopi/files/${name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`;
+
+            this.createIframe();
+            form.submit();
+          } catch (err) {
+            console.error(err.message || err);
+          }
         },
         createIframe() {
-          const frameholder = document.getElementById('frameholder')
-          const office_frame = document.createElement('iframe')
-          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups'
-          office_frame.name = 'office_frame'
-          office_frame.id = 'office_frame'
-          this.hideFileList = true
+          const frameholder = document.getElementById('frameholder');
+          const office_frame = document.createElement('iframe');
+          office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups';
+          office_frame.name = 'office_frame';
+          office_frame.id = 'office_frame';
+          this.hideFileList = true;
           // This attribute allows true fullscreen mode in slideshow view
           // when using PowerPoint Online's 'view' action.
           //office_frame.setAttribute('allowfullscreen', 'true');
 
-          frameholder.appendChild(office_frame)
+          frameholder.appendChild(office_frame);
         }
       },
       async mounted() {
-        const res = await fetch('/fileNames')
-        const data = await res.json()
-        const actionsRes = await fetch('/discovery')
-        const actions = await actionsRes.json()
-        this.actions = actions
-        this.files.push(...data.files)
-        this.wopiServer = data.wopiServer
+        const res = await fetch('/fileNames');
+        const data = await res.json();
+        const actionsRes = await fetch('/discovery');
+        const actions = await actionsRes.json();
+        this.actions = actions;
+        this.files.push(...data.files);
+        this.wopiServer = data.wopiServer;
       },
     })
   </script>

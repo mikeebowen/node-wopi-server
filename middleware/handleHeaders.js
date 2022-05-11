@@ -9,6 +9,7 @@ const { fileInfo } = require('../utils')
 
 module.exports = (req, res, next) => {
   const operation = req.header('X-WOPI-Override')
+
   const { file_id } = req.params
 
   switch (operation) {

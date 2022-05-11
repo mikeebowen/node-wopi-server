@@ -96,7 +96,7 @@ module.exports = async (req, res, next) => {
       BreadcrumbDocName: file_id,
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
-      ClientUrl: `file:///${filePath}`,
+      // ClientUrl: `file:///${filePath}`,
     }
     if (fileInfo.info.BaseFileName === file_id) {
       Object.keys(info).forEach(k => {

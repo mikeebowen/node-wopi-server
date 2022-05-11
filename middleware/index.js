@@ -15,4 +15,5 @@ module.exports = {
   deleteFile: require('./deleteFile'),
   getFileNames: require('./getFileNames'),
   handleHeaders: require('./handleHeaders'),
+  createEmptyFile: require('./createEmptyFile'),
 }
