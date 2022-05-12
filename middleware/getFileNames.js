@@ -6,11 +6,12 @@ const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 module.exports = async (req, res, next) => {
   const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
   try {
-    const files = await readdir(folderPath)
+    const files = (await readdir(folderPath)).sort()
+
     res.send({
-      files: files.map(f => {
+      files: files.map((f, i) => {
         const ext = extname(f)
-        return { name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext }
+        return { id: i, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext }
       }),
       wopiServer: process.env.WOPI_SERVER,
     })

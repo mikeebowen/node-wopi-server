@@ -67,7 +67,7 @@
                                   <form :key="`office_form_${action[0]}_${file.name}`"
                                     :id="`office_form_${action[0]}_${file.name}`" name="office_form"
                                     target="office_frame"
-                                    :action="`${action[1]}${action[1].endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`"
+                                    :action="`${action[1]}${action[1].endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`"
                                     method="post"></form>
                                 </template>
                               </v-btn-toggle>
@@ -131,7 +131,7 @@
             const ext = name.slice(-4);
 
             if (!['docx', 'xlsx', 'pptx'].includes(ext)) {
-              return window.alert('Filename must have one of these extensions ".docx", ".xlsx". or ".pptx"');
+              return window.alert('Filename must have one of these extensions: ".docx", ".xlsx". or ".pptx"');
             }
 
             if (this.files.map(t => t.name).includes(name)) {

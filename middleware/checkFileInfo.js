@@ -2,7 +2,7 @@
 const { parse } = require('path')
 
 const { join } = require('path')
-const { stat } = require('fs/promises')
+const { stat, readdir } = require('fs/promises')
 const { userInfo } = require('os')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { fileInfo } = require('../utils/')
@@ -10,8 +10,12 @@ const { WOPI_SERVER } = process.env
 
 module.exports = async (req, res, next) => {
   let fileStats
-  const { file_id } = req.params
-  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
+  const i = parseInt(req.params.file_id)
+
+  const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+  const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i]
+  const filePath = join(folderPath, fileName)
+
   try {
     fileStats = await stat(filePath)
   } catch (err) {
@@ -69,7 +73,7 @@ module.exports = async (req, res, next) => {
     // res.status(200).json(fileInfoResponse)
 
     const info = {
-      BaseFileName: file_id,
+      BaseFileName: fileName,
       OwnerId: userInfo().uid.toString(),
       // Size: 100,
       Size: fileStats.size,
@@ -93,12 +97,12 @@ module.exports = async (req, res, next) => {
       BreadcrumbBrandUrl: WOPI_SERVER,
       BreadcrumbFolderName: 'WopiStorage',
       BreadcrumbFolderUrl: WOPI_SERVER,
-      BreadcrumbDocName: file_id,
+      BreadcrumbDocName: fileName,
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
       // ClientUrl: `file:///${filePath}`,
     }
-    if (fileInfo.info.BaseFileName === file_id) {
+    if (fileInfo.info.BaseFileName === fileName) {
       Object.keys(info).forEach(k => {
         if (!Object.hasOwnProperty.call(fileInfo.info, k)) {
           fileInfo.info[k] = info[k]

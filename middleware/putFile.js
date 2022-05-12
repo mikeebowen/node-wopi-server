@@ -1,17 +1,23 @@
 'use strict'
 const { join, parse } = require('path')
 const { existsSync } = require('fs')
-const { stat } = require('fs/promises')
+const { stat, readdir } = require('fs/promises')
 const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { fileInfo, updateFile } = require('../utils/')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params
-  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
-  const lockValue = req.header('X-WOPI-Lock')
 
   try {
+    const i = parseInt(file_id)
+
+    const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+    const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i]
+    const filePath = join(folderPath, fileName)
+
+    const lockValue = req.header('X-WOPI-Lock')
     const fileStats = await stat(filePath)
+
     if ((!fileStats.size && !Object.hasOwnProperty.call(fileInfo.lock, file_id)) || (lockValue && fileInfo.lock[file_id] === lockValue)) {
       fileInfo.lock[file_id] = lockValue
       const time = await updateFile(filePath, req.rawBody, true)
