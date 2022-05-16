@@ -8,6 +8,7 @@ module.exports = async function updateFile(filePath, rawBody, updateVersion) {
     if (!existsSync(filePath)) {
       await writeFile(filePath, new Uint8Array(Buffer.from('')))
     }
+
     const wStream = createWriteStream(filePath)
     wStream.write(rawBody)
     const fileStats = await stat(filePath)

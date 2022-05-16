@@ -15,9 +15,8 @@ const {
   getFileNames,
   handleHeaders,
   createEmptyFile,
+  copyFile,
 } = require('./middleware')
-const { createServer } = require('https')
-const { readFileSync } = require('fs')
 const port = process.env.PORT || 3000
 
 // const key = readFileSync('./certificates/wopi-key.pem')
@@ -30,9 +29,11 @@ app.use(getRawBody) // adds the raw binary of the post body to req.rawBody
 // app.get('*', getDiscoveryInfo)
 router.route('/files/:file_id/contents').get(getFile).post(putFile)
 router.route('/files/:file_id').get(checkFileInfo).post(handleHeaders)
+
 app.use('/wopi', checkAccess)
 app.use('/wopi', router)
 app.post('/create/:file_id', createEmptyFile)
+app.post('/add-file', copyFile)
 app.get('/fileNames', getFileNames)
 app.get('/discovery', getDiscoveryInfo)
 app.get('/', (req, res, next) => {

@@ -1,5 +1,5 @@
 'use strict'
-const { parse, join, extname } = require('path')
+const { join, extname } = require('path')
 const { readdir } = require('fs/promises')
 const { decode } = require('utf7')
 const validFileName = require('valid-filename')
@@ -53,7 +53,7 @@ module.exports = async (req, res, next) => {
     try {
       const fileName = isRelative.startsWith('.') ? fileInfo.info.BaseFileName + isRelative : isRelative
       const newFileName = decode(fileName)
-      const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+      const folderPath = join(process.cwd(), 'files')
       const filePath = join(folderPath, newFileName)
       const exists = (await readdir(folderPath)).includes(newFileName)
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, newFileName)

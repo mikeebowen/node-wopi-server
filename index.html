@@ -35,11 +35,17 @@
           <v-list dense>
             <v-list-item-group v-model="selectedItem" color="primary">
               <v-row>
-                <v-col cols="2" offset="9">
+                <v-col cols="3" offset="8">
                   <v-list-item>
                     <v-list-item-content>
-                      <v-btn @click="editNew()">New
-                      </v-btn>
+                      <v-btn-toggle>
+                        <v-btn @click="editNew()">
+                          New File
+                        </v-btn>
+                        <v-btn @click="addExisting()">
+                          Existing File
+                        </v-btn>
+                      </v-btn-toggle>
                       <form id="create_new" name="office_form" target="office_frame" method="post"></form>
                     </v-list-item-content>
                   </v-list-item>
@@ -169,7 +175,33 @@
           //office_frame.setAttribute('allowfullscreen', 'true');
 
           frameholder.appendChild(office_frame);
-        }
+        },
+        addExisting() {
+          const input = document.createElement('input');
+          input.type = 'file';
+
+          input.onchange = e => {
+            const [file] = e.target.files;
+            const reader = new FileReader();
+
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = async readerEvent => {
+              try {
+                const { result } = readerEvent.target;
+                const data = await fetch(`/add-file?file_name=${encodeURIComponent(file.name)}`, { method: 'POST', body: result });
+                const { files, new_file } = await data.json();
+                this.files = files;
+
+                alert(`${new_file} created`);
+              } catch (err) {
+                console.error(err.message || err);
+              }
+            };
+          };
+
+          input.click();
+        },
       },
       async mounted() {
         const res = await fetch('/fileNames');
