@@ -31,12 +31,6 @@ This server can be validated with the [WOPI Validator](https://github.com/micros
 
       - `WOPI_SERVER=http://my-wopi-server:3000`
 
-  - `WOPI_STORAGE` a `/` separated list of the folders of the absolute path to where the OXML files are stored.
-
-    - If the files are stored in `C:\Users\myUser\WopiStorage` then it would be:
-
-      - `WOPI_STORAGE=Users/myUser/WopiStorage`
-
 ## Running the Server
 
 To run the server enter `node index.js` from the root of the project.

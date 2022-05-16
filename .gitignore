@@ -117,3 +117,6 @@ dist
 
 # test cases
 case_work/
+# saved files
+files
+!files/.gitkeep

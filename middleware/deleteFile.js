@@ -2,13 +2,12 @@
 const { unlink, readdir } = require('fs/promises')
 const { join, parse } = require('path')
 const { fileInfo } = require('../utils')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 
 module.exports = async (req, res, next) => {
   const { file_id } = req.params
   const i = parseInt(file_id)
 
-  const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+  const folderPath = join(process.cwd(), 'files')
   const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i]
   const filePath = join(folderPath, fileName)
 

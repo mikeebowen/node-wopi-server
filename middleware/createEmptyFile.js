@@ -1,10 +1,9 @@
-const {join, parse} = require('path')
+const {join} = require('path')
 const {writeFile} = require('fs/promises')
 
 module.exports = async (req, res, next) => {
-  const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
   const { file_id } = req.params
-  const filePath = join(parse(process.cwd()).root, ...wopiStorageFolder, file_id)
+  const filePath = join(process.cwd(), 'files', file_id)
 
   try {
     await writeFile(filePath, Buffer.from(''), {flag: 'a'})

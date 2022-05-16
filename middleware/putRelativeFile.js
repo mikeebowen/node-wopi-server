@@ -4,7 +4,6 @@ const { readdir } = require('fs/promises')
 const { decode } = require('utf7')
 const validFileName = require('valid-filename')
 const { fileInfo, updateFile, getWopiMethods } = require('../utils')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 const { WOPI_SERVER } = process.env
 
 module.exports = async (req, res, next) => {
@@ -22,7 +21,7 @@ module.exports = async (req, res, next) => {
       const fileName = isSuggested.startsWith('.') ? fileInfo.info.BaseFileName + isSuggested : isSuggested
       const decodedFileName = decode(fileName)
       let newFileName = decodedFileName
-      const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+      const folderPath = join(process.cwd(), 'files')
       const files = await readdir(folderPath)
       let count = 1
 

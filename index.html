@@ -149,7 +149,7 @@
 
             const form = document.getElementById('create_new');
             const action = this.actions[ext].find(x => x[0] === 'editnew')[1];
-            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`http://mikeesoft.local:3000/wopi/files/${name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`;
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${this.wopiServer}/wopi/files/${name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`;
 
             this.createIframe();
             form.submit();

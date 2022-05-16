@@ -1,10 +1,10 @@
 'use strict'
 const { join, parse, extname } = require('path')
 const { readdir } = require('fs/promises')
-const wopiStorageFolder = process.env.WOPI_STORAGE.split('/')
 
 module.exports = async (req, res, next) => {
-  const folderPath = join(parse(process.cwd()).root, ...wopiStorageFolder)
+  const folderPath = join(process.cwd(), 'files')
+
   try {
     const files = (await readdir(folderPath)).sort()
 

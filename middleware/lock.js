@@ -21,9 +21,11 @@ module.exports = (req, res, next) => {
     if (fileInfo.info.Version) {
       res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version)
     }
+
     return res.sendStatus(200)
   } else {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '')
+
     return res.sendStatus(409)
   }
 }
