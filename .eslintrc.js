@@ -34,7 +34,7 @@ module.exports = {
     ],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     quotes: [2, 'single', { avoidEscape: true }],
-    semi: ['error', 'never'],
+    semi: ['warn', 'always'],
     'space-in-parens': ['error', 'never'],
   },
-}
+};

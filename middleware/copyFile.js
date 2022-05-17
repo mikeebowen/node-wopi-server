@@ -1,5 +1,4 @@
 'use strict';
-const { read } = require('fs');
 const { readdir } = require('fs/promises');
 const { join, extname } = require('path');
 const { decode } = require('utf7');
@@ -30,7 +29,7 @@ module.exports = async function (req, res, next) {
       files: newFiles.map((f, i) => {
         const ext = extname(f);
         return { id: i, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext };
-      })
+      }),
     });
   } catch (err) {
     console.error(err.message || err);
