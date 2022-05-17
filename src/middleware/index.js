@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
   checkFileInfo: require('./checkFileInfo'),
@@ -17,4 +17,4 @@ module.exports = {
   handleHeaders: require('./handleHeaders'),
   createEmptyFile: require('./createEmptyFile'),
   copyFile: require('./copyFile'),
-}
+};

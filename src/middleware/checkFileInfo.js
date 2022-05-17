@@ -1,21 +1,20 @@
-'uses strict'
-const { parse } = require('path')
+'uses strict';
 
-const { join } = require('path')
-const { stat, readdir } = require('fs/promises')
-const { userInfo } = require('os')
-const { fileInfo } = require('../utils/')
-const { WOPI_SERVER } = process.env
+const { join } = require('path');
+const { stat, readdir } = require('fs/promises');
+const { userInfo } = require('os');
+const { fileInfo } = require('../utils/');
+const { WOPI_SERVER } = process.env;
 
 module.exports = async (req, res, next) => {
-  let fileStats
-  const i = parseInt(req.params.file_id)
-  const folderPath = join(process.cwd(), 'files')
-  const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i]
-  const filePath = join(folderPath, fileName)
+  let fileStats;
+  const i = parseInt(req.params.file_id);
+  const folderPath = join(process.cwd(), 'files');
+  const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i];
+  const filePath = join(folderPath, fileName);
 
   try {
-    fileStats = await stat(filePath)
+    fileStats = await stat(filePath);
   } catch (err) {
     fileStats = {
       dev: 2114,
@@ -36,7 +35,7 @@ module.exports = async (req, res, next) => {
       mtime: new Date(),
       ctime: new Date(),
       birthtime: new Date(),
-    }
+    };
   }
   try {
     // res.send({
@@ -99,19 +98,19 @@ module.exports = async (req, res, next) => {
       ReadOnly: false,
       // UserCanNotWriteRelative: true,
       ClientUrl: filePath,
-    }
+    };
     if (fileInfo.info.BaseFileName === fileName) {
       Object.keys(info).forEach(k => {
         if (!Object.hasOwnProperty.call(fileInfo.info, k)) {
-          fileInfo.info[k] = info[k]
+          fileInfo.info[k] = info[k];
         }
-      })
+      });
     } else {
-      fileInfo.info = info
+      fileInfo.info = info;
     }
-    res.send(fileInfo.info)
+    res.send(fileInfo.info);
   } catch (err) {
-    console.error(err.message || err)
-    return res.status(404)
+    console.error(err.message || err);
+    return res.status(404);
   }
-}
+};

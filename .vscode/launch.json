@@ -10,8 +10,10 @@
       "name": "Launch Program",
       "runtimeExecutable": "nodemon",
       "restart": true,
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\index.js"
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}\\src\\index.js"
     }
   ]
 }

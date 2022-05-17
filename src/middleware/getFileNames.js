@@ -1,5 +1,5 @@
 'use strict';
-const { join, parse, extname } = require('path');
+const { join, extname } = require('path');
 const { readdir } = require('fs/promises');
 
 module.exports = async (req, res, next) => {

@@ -2,7 +2,7 @@
   "name": "wopi-server",
   "version": "0.0.1",
   "description": "A sample WOPI Server written with JavaScript/Node.js",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

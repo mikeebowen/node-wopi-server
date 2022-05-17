@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const fileInfo = {
   lock: {},
@@ -25,7 +25,7 @@ const fileInfo = {
     'ppsm',
     'pdf',
   ],
-}
-Object.seal(fileInfo)
+};
+Object.seal(fileInfo);
 
-module.exports = fileInfo
+module.exports = fileInfo;
