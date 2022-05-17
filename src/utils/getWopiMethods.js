@@ -1,10 +1,14 @@
 'use strict';
 const http = require('http');
 const convert = require('xml-js');
-const { OFFICE_ONLINE_SERVER } = process.env;
+const { OFFICE_ONLINE_SERVER } = process.env || '';
 
 module.exports = async () => {
   return new Promise((resolve, reject) => {
+    if (OFFICE_ONLINE_SERVER == null) {
+      throw new Error('process.env.OFFICE_ONLINE_SERVER must be defined and point to an instance of Office Online Server');
+    }
+
     const hostUrl = new URL(OFFICE_ONLINE_SERVER);
     const options = {
       host: hostUrl.hostname,
@@ -25,12 +29,12 @@ module.exports = async () => {
 
       //the whole response has been received, so respond
       response.on('end', function () {
-        const json = convert.xml2js(str, { compact: true, spaces: 2 });
+        const json = convert.xml2js(str, { compact: true });
         const data = {};
-        const implemented = process.env.WOPI_IMPLEMENTED.split(',');
+        const implemented = process.env.WOPI_IMPLEMENTED?.split(',');
         json['wopi-discovery']['net-zone'].app.forEach(a => {
           a.action.forEach(ac => {
-            if (implemented.includes(ac._attributes.name)) {
+            if (implemented?.includes(ac._attributes.name)) {
               const name = ac._attributes.name;
               const splitUrl = ac._attributes.urlsrc.split('?');
               const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '');

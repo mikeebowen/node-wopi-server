@@ -120,3 +120,5 @@ case_work/
 # saved files
 files
 !files/.gitkeep
+out/
+bin/

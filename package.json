@@ -14,11 +14,15 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "ts-node": "^10.7.0",
     "utf7": "^1.0.2",
     "valid-filename": "^3.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "eslint": "^8.15.0"
+    "@types/eslint": "^8.4.2",
+    "@types/express": "^4.17.13",
+    "eslint": "^8.15.0",
+    "typescript": "^4.6.4"
   }
 }
