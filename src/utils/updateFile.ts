@@ -1,9 +1,8 @@
-'use strict';
-const { createWriteStream, existsSync } = require('fs');
-const { stat, writeFile } = require('fs/promises');
-const fileInfo = require('./fileInfo');
+import { createWriteStream, existsSync } from 'fs';
+import { stat, writeFile } from 'fs/promises';
+import { fileInfo } from './fileInfo';
 
-module.exports = async function updateFile(filePath, rawBody, updateVersion) {
+export async function updateFile(filePath: string, rawBody: Buffer, updateVersion?: boolean) {
   try {
     if (!existsSync(filePath)) {
       await writeFile(filePath, new Uint8Array(Buffer.from('')));
@@ -13,12 +12,18 @@ module.exports = async function updateFile(filePath, rawBody, updateVersion) {
     wStream.write(rawBody);
     const fileStats = await stat(filePath);
     const time = fileStats.ctimeMs.toString();
-    if (updateVersion) {
+
+    if (updateVersion && fileInfo.info) {
       fileInfo.info.Version = time;
     }
+
+
     return time;
   } catch (err) {
-    console.error(err.message || err);
+    console.error((err as Error).message || err);
+
     return 0;
   }
-};
+}
+
+;

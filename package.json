@@ -13,16 +13,20 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "emailjs-utf7": "^4.0.1",
     "express": "^4.17.1",
     "ts-node": "^10.7.0",
-    "utf7": "^1.0.2",
     "valid-filename": "^3.1.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@types/eslint": "^8.4.2",
     "@types/express": "^4.17.13",
+    "@types/node": "^17.0.45",
+    "@typescript-eslint/eslint-plugin": "^5.25.0",
+    "@typescript-eslint/parser": "^5.25.0",
     "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
     "typescript": "^4.6.4"
   }
 }

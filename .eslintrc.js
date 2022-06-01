@@ -1,14 +1,39 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 module.exports = {
-  'root': true,
+  'env': {
+    'browser': true,
+    'es2021': true,
+  },
+  'extends': [
+    'google',
+  ],
   'parser': '@typescript-eslint/parser',
   'parserOptions': {
-    'ecmaVersion': 6,
+    'ecmaVersion': 'latest',
     'sourceType': 'module',
   },
-  'plugins': ['@typescript-eslint'],
+  'plugins': [
+    '@typescript-eslint',
+  ],
   'rules': {
-    '@typescript-eslint/naming-convention': 'warn',
-    'semi': 'off',
+    'linebreak-style': 0,
+    'object-curly-spacing': ['error', 'always', { 'arraysInObjects': true, 'objectsInObjects': true }],
+    '@typescript-eslint/naming-convention': [
+      'warn',
+      {
+        'selector': 'class',
+        'format': ['PascalCase'],
+      },
+      {
+        'selector': 'interface',
+        'format': ['PascalCase'],
+      },
+      {
+        'selector': 'variable',
+        'format': ['camelCase', 'snake_case'],
+      },
+    ],
+    // 'semi': 'off',
     '@typescript-eslint/semi': 'error',
     '@typescript-eslint/member-delimiter-style': [
       'warn',
@@ -34,7 +59,7 @@ module.exports = {
     ],
     'newline-before-return': 'error',
     'curly': 'warn',
-    'eqeqeq': 'warn',
+    'eqeqeq': ['warn', 'always', { null: 'ignore' }],
     'no-throw-literal': 'warn',
     'prefer-const': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn', { 'args': 'none' }],
@@ -69,5 +94,6 @@ module.exports = {
     'quotes': ['error', 'single', { 'avoidEscape': true }],
     'space-in-parens': ['error', 'never'],
     'newline-per-chained-call': ['error', { 'ignoreChainWithDepth': 3 }],
+    'require-jsdoc': 0,
   },
 };

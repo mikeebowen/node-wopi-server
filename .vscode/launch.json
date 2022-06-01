@@ -22,7 +22,7 @@
       "smartStep": false,
       "sourceMaps": true,
       "args": [
-        "${workspaceRoot}/bin/index.ts"
+        "${workspaceRoot}/src/index.ts"
       ],
       "runtimeArgs": [
         "-r",

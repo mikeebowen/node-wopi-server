@@ -1,11 +1,10 @@
-'use strict';
+import { NextFunction, Request, Response } from 'express';
+import { existsSync } from 'fs';
+import { readdir, readFile } from 'fs/promises';
+import { join } from 'path';
+import { fileInfo } from '../utils';
 
-const { join } = require('path');
-const { existsSync } = require('fs');
-const { readFile, readdir } = require('fs/promises');
-const { fileInfo } = require('../utils/');
-
-module.exports = async (req, res, next) => {
+export async function getFile(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const i = parseInt(req.params.file_id);
 
@@ -15,17 +14,24 @@ module.exports = async (req, res, next) => {
 
     if (existsSync(filePath)) {
       const file = await readFile(filePath);
-      if (fileInfo.info.Version) {
+
+      if (fileInfo?.info?.Version) {
         res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version);
       }
+
       res.status(200);
-      return res.send(file);
+
+      res.send(file);
     } else {
       res.status(404);
-      return res.send('not found');
+
+      res.send('not found');
     }
   } catch (err) {
-    console.error(err.message || err);
-    return res.sendStatus(500);
+    console.error((err as Error)?.message || err);
+
+    res.sendStatus(500);
   }
-};
+}
+
+;

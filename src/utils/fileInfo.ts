@@ -1,8 +1,8 @@
-'use strict';
+import { FileInfo } from '../models';
 
-const fileInfo = {
-  lock: {},
-  info: {},
+export const fileInfo = new FileInfo({
+  lock: undefined,
+  info: undefined,
   supportedExtensions: [
     'doc',
     'docx',
@@ -25,7 +25,6 @@ const fileInfo = {
     'ppsm',
     'pdf',
   ],
-};
+});
 Object.seal(fileInfo);
 
-module.exports = fileInfo;

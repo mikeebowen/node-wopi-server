@@ -1,10 +1,11 @@
 'use strict';
 
 require('dotenv').config();
-const { join } = require('path');
+import { NextFunction, Request, Response } from 'express';
+import { join } from 'path';
 const express = require('express');
 const app = express();
-const router = express.Router();
+const router = new express.Router();
 const {
   getDiscoveryInfo,
   getFile,
@@ -36,7 +37,7 @@ app.post('/create/:file_id', createEmptyFile);
 app.post('/add-file', copyFile);
 app.get('/fileNames', getFileNames);
 app.get('/discovery', getDiscoveryInfo);
-app.get('/', (req, res, next) => {
+app.get('/', (req: Request, res: Response, next:NextFunction) => {
   // res.sendFile(join(__dirname, 'SampleHostPage.html'))
   res.sendFile(join(__dirname, 'index.html'));
 });
