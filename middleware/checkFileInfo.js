@@ -1,7 +1,7 @@
 'uses strict';
 const { parse } = require('path');
 
-const { join } = require('path');
+const { basename } = require('path');
 const { stat, readdir } = require('fs/promises');
 const { userInfo } = require('os');
 const { fileInfo } = require('../utils/');
@@ -9,10 +9,7 @@ const { WOPI_SERVER } = process.env;
 
 module.exports = async (req, res, next) => {
   let fileStats;
-  const i = parseInt(req.params.file_id);
-  const folderPath = join(process.cwd(), 'files');
-  const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i];
-  const filePath = join(folderPath, fileName);
+  const filePath = await fileInfo.getFilePath(req.params.file_id);
 
   try {
     fileStats = await stat(filePath);
@@ -69,6 +66,7 @@ module.exports = async (req, res, next) => {
     //   'https://microsoft-my.sharepoint.com/:w:/r/personal/mibowe_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7B55C14245-7FA9-40E1-9695-9C8E5E3D364C%7D&file=test.docx&action=default&mobileredirect=true',
     // })
     // res.status(200).json(fileInfoResponse)
+    const fileName = basename(filePath);
 
     const info = {
       BaseFileName: fileName,

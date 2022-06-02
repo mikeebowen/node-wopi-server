@@ -20,7 +20,6 @@ module.exports = async function (req, res, next) {
     await updateFile(join(process.cwd(), 'files', newFileName), req.rawBody);
 
     const newFiles = await readdir(join(process.cwd(), 'files'));
-    newFiles.sort();
 
     res.status = 201;
 

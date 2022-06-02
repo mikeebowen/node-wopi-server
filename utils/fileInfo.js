@@ -1,4 +1,6 @@
-'use strict'
+'use strict';
+const { readdir, stat } = require('fs/promises');
+const { join } = require('path');
 
 const fileInfo = {
   lock: {},
@@ -25,7 +27,31 @@ const fileInfo = {
     'ppsm',
     'pdf',
   ],
-}
-Object.seal(fileInfo)
+  getFilePath: async function (file_id) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (this.idMap.hasOwnProperty(file_id)) {
+      return this.idMap[file_id];
+    }
 
-module.exports = fileInfo
+    const folderPath = join(process.cwd(), 'files');
+    let fileName = file_id;
+
+    for (let name of (await readdir(folderPath))) {
+      const stats = await stat(join(folderPath, name));
+
+      if (stats.ino.toString() === file_id) {
+        fileName = name;
+        break;
+      }
+    }
+
+    const filePath = join(folderPath, fileName);
+    this.idMap[file_id] = filePath;
+
+    return filePath;
+  },
+  idMap: {},
+};
+Object.seal(fileInfo);
+
+module.exports = fileInfo;

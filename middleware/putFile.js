@@ -7,12 +7,7 @@ module.exports = async (req, res, next) => {
   const { file_id } = req.params;
 
   try {
-    const i = parseInt(file_id);
-
-    const folderPath = join(process.cwd(), 'files');
-    const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i];
-    const filePath = join(folderPath, fileName);
-
+    const filePath = await fileInfo.getFilePath(req.params.file_id);
     const lockValue = req.header('X-WOPI-Lock');
     const fileStats = await stat(filePath);
 
@@ -27,6 +22,7 @@ module.exports = async (req, res, next) => {
       return res.sendStatus(409);
     }
   } catch (error) {
+    console.error(error.message || error);
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '');
     return res.sendStatus(409);
   }
