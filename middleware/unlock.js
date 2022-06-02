@@ -15,10 +15,13 @@ module.exports = (req, res, next) => {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '');
     return res.sendStatus(409);
   } else {
-    delete fileInfo.lock[file_id]
     if (fileInfo.info.Version) {
       res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version);
     }
-    return res.sendStatus(200)
+
+    fileInfo.info = {};
+    fileInfo.lock = {};
+
+    return res.sendStatus(200);
   }
 };

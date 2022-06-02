@@ -78,7 +78,7 @@ module.exports = async (req, res, next) => {
       UserId: userInfo().username,
       UserFriendlyName: userInfo().username,
       // Version: new Date(fileStats.mtime).toISOString(),
-      Version: fileStats.ctimeMs.toString(),
+      Version: fileStats.mtimeMs.toString(),
       // Version: 'foobar',
       SupportsLocks: true,
       SupportsGetLock: true,
