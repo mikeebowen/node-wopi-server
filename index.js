@@ -24,14 +24,13 @@ const port = process.env.PORT || 3000;
 // const pfx = readFileSync(join(__dirname, 'certificates', 'dev-cert.pfx'))
 // const passphrase = 'p@ssw0rd'
 // const secureProtocol = 'TLSv1_2_method'
-
 app.use(getRawBody); // adds the raw binary of the post body to req.rawBody
 // app.get('*', getDiscoveryInfo)
 router.route('/files/:file_id/contents').get(getFile).post(putFile);
 router.route('/files/:file_id').get(checkFileInfo).post(handleHeaders);
 
-app.use('/wopi', checkAccess);
-app.use('/wopi', router);
+app.use('/api/wopi', checkAccess);
+app.use('/api/wopi', router);
 app.post('/create/:file_id', createEmptyFile);
 app.post('/add-file', copyFile);
 app.get('/fileNames', getFileNames);

@@ -28,8 +28,7 @@ const fileInfo = {
     'pdf',
   ],
   getFilePath: async function (file_id) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (this.idMap.hasOwnProperty(file_id)) {
+    if (Object.hasOwnProperty.call(this.idMap, file_id)) {
       return this.idMap[file_id];
     }
 
@@ -52,6 +51,7 @@ const fileInfo = {
   },
   idMap: {},
 };
+
 Object.seal(fileInfo);
 
 module.exports = fileInfo;

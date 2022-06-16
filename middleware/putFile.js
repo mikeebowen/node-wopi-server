@@ -14,9 +14,10 @@ module.exports = async (req, res, next) => {
     if ((!fileStats.size && !Object.hasOwnProperty.call(fileInfo.lock, file_id)) || (lockValue && fileInfo.lock[file_id] === lockValue)) {
       fileInfo.lock[file_id] = lockValue;
       const time = await updateFile(filePath, req.rawBody, true);
-      res.setHeader('X-WOPI-ItemVersion', time);
+
       fileInfo.info.Version = time;
-      return res.sendStatus(200);
+
+      return res.set({ 'X-WOPI-ItemVersion': time, 'X-WOPI-Lock': fileInfo.lock[file_id] || '' }).sendStatus(200);
     } else {
       res.setHeader('X-WOPI-Lock', fileInfo.lock[file_id] || '');
       return res.sendStatus(409);

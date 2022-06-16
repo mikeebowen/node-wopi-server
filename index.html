@@ -53,33 +53,31 @@
               </v-row>
               <v-subheader>Files</v-subheader>
               <template v-for="(file, i) in files">
-                <v-row v-if="Object.keys(actions).includes(file.ext)" :key="i">
+                <v-row v-if="Object.hasOwnProperty.call(actions, file.ext)" :key="i">
                   <v-col>
                     <v-list-item>
-                      <v-list-item-icon class="w-100">
+                      <v-list-item-icon>
                         <v-icon>{{icon(file.ext)}}</v-icon>
-                        </v-list-item-titl-icon>
-                        <v-list-item-content>
-                          <v-row>
-                            <v-col cols="6">
-                              <v-list-item>{{file.name}}</v-list-item-title>
-                            </v-col>
-                            <v-col cols="6">
-                              <v-btn-toggle>
-                                <template v-for="action in actions[file.ext]" v-if="action[0] !== 'editnew'">
-                                  <v-btn @click="submitForm(`office_form_${action[0]}_${file.name}`)">
-                                    {{action[0]}}
-                                  </v-btn>
-                                  <form :key="`office_form_${action[0]}_${file.name}`"
-                                    :id="`office_form_${action[0]}_${file.name}`" name="office_form"
-                                    target="office_frame"
-                                    :action="`${action[1]}${action[1].endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`"
-                                    method="post"></form>
-                                </template>
-                              </v-btn-toggle>
-                            </v-col>
-                          </v-row>
-                        </v-list-item-content>
+                      </v-list-item-icon>
+                      <v-row>
+                        <v-col cols="6">
+                          <v-list-item>{{file.name}}</v-list-item-title>
+                        </v-col>
+                        <v-col cols="6">
+                          <v-btn-toggle>
+                            <template v-for="[actionName, actionUrl] in actions[file.ext]"
+                              v-if="actionName !== 'editnew'">
+                              <v-btn @click="submitForm(`office_form_${actionName}_${file.name}`)">
+                                {{actionName}}
+                              </v-btn>
+                              <form :key="`office_form_${actionName}_${file.name}`"
+                                :id="`office_form_${actionName}_${file.name}`" name="office_form" target="office_frame"
+                                :action="`${actionUrl}${actionUrl.endsWith('?') ? '' : '&'}ui=en-US&rs=en-US&dchat=1&IsLicensedUser=1&WOPISrc=${encodeURIComponent(`${wopiServer}/api/wopi/files/${file.id}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`"
+                                method="post"></form>
+                            </template>
+                          </v-btn-toggle>
+                        </v-col>
+                      </v-row>
                     </v-list-item>
                   </v-col>
                 </v-row>
@@ -155,7 +153,7 @@
 
             const form = document.getElementById('create_new');
             const action = this.actions[ext].find(x => x[0] === 'editnew')[1];
-            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${this.wopiServer}/wopi/files/${name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`;
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${this.wopiServer}/api/wopi/files/${name}`)}&access_token=DEADBEEFDEADBEEFDEADBEEF&access_token_ttl=0`;
 
             this.createIframe();
             form.submit();
@@ -172,7 +170,7 @@
           this.hideFileList = true;
           // This attribute allows true fullscreen mode in slideshow view
           // when using PowerPoint Online's 'view' action.
-          //office_frame.setAttribute('allowfullscreen', 'true');
+          office_frame.setAttribute('allowfullscreen', 'true');
 
           frameholder.appendChild(office_frame);
         },
