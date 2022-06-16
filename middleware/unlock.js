@@ -19,7 +19,6 @@ module.exports = (req, res, next) => {
       res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version);
     }
 
-    fileInfo.info = {};
     fileInfo.lock = {};
 
     return res.sendStatus(200);
