@@ -30,7 +30,8 @@ interface ICheckFileInfoResponse {
   EditNotificationPostMessage?: boolean;
   EmbeddingPageOrigin?: string;
   EmbeddingPageSessionInfo?: string;
-  EnabledApplicationFeatures?: string[];
+    // TODO: This is in the documentation, but not the tests. Find out which is correct
+// EnabledApplicationFeatures?: string[];
   FileEmbedCommandPostMessage?: boolean;
   FileEmbedCommandUrl?: string;
   FileExtension?: string;
@@ -60,7 +61,8 @@ interface ICheckFileInfoResponse {
   LicenseCheckForEditIsEnabled?: boolean;
   LicensedOrganization?: string;
   OfficeCollaborationServiceEndpointUrl?: string;
-  OpenInClientCommandUrl?: string;
+  // TODO: This is in the documentation, but not the tests. Find out which is correct
+  // OpenInClientCommandUrl?: string;
   OpenInClientPostMessage?: boolean;
   OwnerId: string;
   PermissionsPostMessage?: boolean;
@@ -118,7 +120,8 @@ interface ICheckFileInfoResponse {
   UserFriendlyName?: string;
   UserId?: string;
   UserInfo?: string;
-  UserPrincipalName?: string;
+  // TODO: This is in the documentation, but not the tests. Find out which is correct
+// UserPrincipalName?: string;
   Version: string;
   WebEditingDisabled?: boolean;
   WorkflowType?: string[];
@@ -157,7 +160,8 @@ export class CheckFileInfoResponse {
   EditNotificationPostMessage?: boolean;
   EmbeddingPageOrigin?: string;
   EmbeddingPageSessionInfo?: string;
-  EnabledApplicationFeatures?: string[];
+  // TODO: This is in the documentation, but not the tests. Find out which is correct
+  // EnabledApplicationFeatures?: string[];
   FileEmbedCommandPostMessage?: boolean;
   FileEmbedCommandUrl?: string;
   FileExtension?: string;
@@ -186,8 +190,9 @@ export class CheckFileInfoResponse {
   LastModifiedTime?: string;
   LicenseCheckForEditIsEnabled?: boolean;
   LicensedOrganization?: string;
-  OfficeCollaborationServiceEndpointUrl: string;
-  OpenInClientCommandUrl: string;
+  OfficeCollaborationServiceEndpointUrl?: string;
+  // TODO: This is in the documentation, but not the tests. Find out which is correct
+  // OpenInClientCommandUrl: string;
   OpenInClientPostMessage?: boolean;
   OwnerId: string;
   PermissionsPostMessage?: boolean;
@@ -245,7 +250,8 @@ export class CheckFileInfoResponse {
   UserFriendlyName?: string;
   UserId?: string;
   UserInfo?: string;
-  UserPrincipalName: string;
+  // TODO: This is in the documentation, but not the tests. Find out which is correct
+  // UserPrincipalName: string;
   Version: string;
   WebEditingDisabled?: boolean;
   WorkflowType?: string[];
@@ -283,7 +289,8 @@ export class CheckFileInfoResponse {
     this.EditNotificationPostMessage = options.EditNotificationPostMessage;
     this.EmbeddingPageOrigin = options.EmbeddingPageOrigin;
     this.EmbeddingPageSessionInfo = options.EmbeddingPageSessionInfo;
-    this.EnabledApplicationFeatures = options.EnabledApplicationFeatures ?? [];
+    // TODO: This is in the documentation, but not the tests. Find out which is correct
+    // this.EnabledApplicationFeatures = options.EnabledApplicationFeatures ?? [];
     this.FileEmbedCommandPostMessage = options.FileEmbedCommandPostMessage;
     this.FileEmbedCommandUrl = options.FileEmbedCommandUrl;
     this.FileExtension = options.FileExtension;
@@ -312,8 +319,9 @@ export class CheckFileInfoResponse {
     this.LastModifiedTime = options.LastModifiedTime;
     this.LicenseCheckForEditIsEnabled = options.LicenseCheckForEditIsEnabled;
     this.LicensedOrganization = options.LicensedOrganization;
-    this.OfficeCollaborationServiceEndpointUrl = options.OfficeCollaborationServiceEndpointUrl ?? '';
-    this.OpenInClientCommandUrl = options.OpenInClientCommandUrl ?? '';
+    this.OfficeCollaborationServiceEndpointUrl = options.OfficeCollaborationServiceEndpointUrl;
+    // TODO: This is in the documentation, but not the tests. Find out which is correct
+    // this.OpenInClientCommandUrl = options.OpenInClientCommandUrl ?? '';
     this.OpenInClientPostMessage = options.OpenInClientPostMessage;
     this.OwnerId = options.OwnerId;
     this.PermissionsPostMessage = options.PermissionsPostMessage;
@@ -371,7 +379,8 @@ export class CheckFileInfoResponse {
     this.UserFriendlyName = options.UserFriendlyName;
     this.UserId = options.UserId;
     this.UserInfo = options.UserInfo;
-    this.UserPrincipalName = options.UserPrincipalName ?? '';
+    // TODO: This is in the documentation, but not the tests. Find out which is correct
+    // this.UserPrincipalName = options.UserPrincipalName ?? '';
     this.Version = options.Version;
     this.WebEditingDisabled = options.WebEditingDisabled;
     this.WorkflowType = options.WorkflowType ?? [];

@@ -1,12 +1,5 @@
-'use strict';
 import { NextFunction, Request, Response } from 'express';
-// const lock = require('./lock');
-// const refreshLock = require('./refreshLock');
-// const unlock = require('./unlock');
-// const getLock = require('./getLock');
-// const putRelativeFile = require('./putRelativeFile');
-// const deleteFile = require('./deleteFile');
-// const { fileInfo } = require('../utils');
+import { fileInfo } from '../utils';
 import { deleteFile, getLock, lock, putRelativeFile, refreshLock, unlock } from './index';
 
 export function handleHeaders(req: Request, res: Response, next: NextFunction): void {
@@ -37,7 +30,9 @@ export function handleHeaders(req: Request, res: Response, next: NextFunction): 
   default:
     res.setHeader('X-WOPI-Lock', fileInfo.lock[fileId] || '');
 
-    return res.sendStatus(409);
+    res.sendStatus(409);
+
+    return;
   }
 }
 

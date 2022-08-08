@@ -12,7 +12,7 @@ export function unlock(req: Request, res: Response, next: NextFunction): void {
 
   const { file_id: fileId } = req.params;
 
-  if (!Object.hasOwnProperty.call(fileInfo.lock, fileId) || fileInfo.lock[fileId] !== lockValue) {
+  if ((fileInfo.lock[fileId] && fileInfo.lock[fileId] !== lockValue) || !Object.hasOwnProperty.call(fileInfo.lock, fileId)) {
     res.setHeader('X-WOPI-Lock', fileInfo.lock[fileId] || '');
     res.sendStatus(409);
 

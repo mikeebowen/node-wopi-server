@@ -1,6 +1,3 @@
-// 'use strict';
-// const http = require('http');
-// const convert = require('xml-js');
 import { IncomingMessage, request } from 'http';
 import { Element, xml2js } from 'xml-js';
 
@@ -34,39 +31,30 @@ export const getWopiMethods = async (): Promise<any> => {
         // the whole response has been received, so respond
         response.on('end', function() {
           const dataFromXml = xml2js(str, { compact: false }) as Element;
-          const data: {[key: string]: string[]} = {};
+          const data: {[key: string]: [[string, string]]} = {};
           const implemented = process.env.WOPI_IMPLEMENTED?.split(',');
-          const actions: Element[] = [];
 
-          dataFromXml.elements?.forEach((el: Element) => {
-            if (el.name === 'net-zone') {
-              el.elements?.forEach((ele: Element) => {
-                ele.elements?.forEach((elem: Element) => {
-                  if (elem.name === 'action') {
-                    actions.push(elem);
+          dataFromXml.elements?.find((el: Element) => el.name === 'wopi-discovery')
+            ?.elements?.find((el: Element) => el.name === 'net-zone')
+            ?.elements?.forEach((el: Element) => {
+              el.elements?.forEach((el: Element) => {
+                if (el.attributes?.name && typeof(el.attributes?.name) === 'string') {
+                  if (implemented?.includes(el.attributes.name)) {
+                    const name = el.attributes.name;
+                    const splitUrl: string[] = (el.attributes.urlsrc)?.toString().split('?') ?? [];
+                    const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '');
+
+                    if (el.attributes?.ext) {
+                      if (!Object.prototype.hasOwnProperty.call(data, el.attributes?.ext)) {
+                        data[el.attributes.ext] = [[name, `${splitUrl[0]}?${queryParams}`]];
+                      } else {
+                        data[el.attributes.ext].push([name, `${splitUrl[0]}?${queryParams}`]);
+                      }
+                    }
                   }
-                });
+                }
               });
-            }
-          });
-
-
-
-          // dataFromXml['wopi-discovery']['net-zone'].app.forEach((a) => {
-          //   a.action.forEach((ac) => {
-          //     if (implemented?.includes(ac._attributes.name)) {
-          //       const name = ac._attributes.name;
-          //       const splitUrl = ac._attributes.urlsrc.split('?');
-          //       const queryParams = splitUrl[1].replace(/<.*>/, '').replace(/&$/, '');
-
-          //       if (!Object.prototype.hasOwnProperty.call(data, ac._attributes.ext)) {
-          //         data[ac._attributes.ext] = [[name, `${splitUrl[0]}?${queryParams}`]];
-          //       } else {
-          //         data[ac._attributes.ext].push([name, `${splitUrl[0]}?${queryParams}`]);
-          //       }
-          //     }
-          //   });
-          // });
+            });
 
           resolve(data);
         });
@@ -74,7 +62,7 @@ export const getWopiMethods = async (): Promise<any> => {
 
       request(options, callback).end();
     } catch (err) {
-      Promise.reject(err);
+      reject(err);
     }
   });
 };

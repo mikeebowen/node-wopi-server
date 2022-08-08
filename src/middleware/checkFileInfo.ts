@@ -81,9 +81,9 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     });
 
     if (fileInfo?.info?.BaseFileName === fileName) {
-      const combined = Object.assign(info, fileInfo);
+      const combined = Object.assign(info, fileInfo.info);
 
-      fileInfo.info = new CheckFileInfoResponse(combined);
+      fileInfo.info = combined;
     } else {
       fileInfo.info = info;
     }

@@ -22,7 +22,9 @@ export async function putFile(req: ICustomRequest, res: Response, next: NextFunc
     const fileStats = await stat(filePath);
 
     if ((!fileStats.size && !Object.hasOwnProperty.call(fileInfo.lock, fileId)) || (lockValue && fileInfo.lock[fileId] === lockValue)) {
-      fileInfo.lock[fileId] = lockValue ?? '';
+      if (lockValue) {
+        fileInfo.lock[fileId] = lockValue;
+      }
 
       const time = await updateFile(filePath, req.rawBody ?? Buffer.from(''), true);
 

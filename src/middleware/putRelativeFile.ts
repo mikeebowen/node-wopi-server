@@ -120,8 +120,6 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
   }
 }
 
-;
-
 const getUrls = async (newFileName: string) => {
   const actionUrl = new URL(`${wopiServer}/wopi/files/${newFileName}`);
   actionUrl.searchParams.append('access_token', 'myVerySecretToken');
@@ -130,7 +128,7 @@ const getUrls = async (newFileName: string) => {
 
   const viewActionUrl = Object.hasOwnProperty.call(urls, ext) ?
     urls[ext].filter((u: string[]) => u[0] === 'view')[0][1] :
-    urls.undefined.filter((u: string[]) => u[0] === 'view')[0][1];
+    urls['docx'].filter((u: string[]) => u[0] === 'view')[0][1];
 
   const hostViewUrl = new URL(viewActionUrl);
   hostViewUrl.searchParams.append('embed', '1');
@@ -138,7 +136,7 @@ const getUrls = async (newFileName: string) => {
 
   const editActionUrl = Object.hasOwnProperty.call(urls, ext) ?
     urls[ext].filter((u: string[]) => u[0] === 'edit')[0][1] :
-    urls.undefined.filter((u: string[]) => u[0] === 'edit')[0][1];
+    urls['docx'].filter((u: string[]) => u[0] === 'edit')[0][1];
 
   const hostEditUrl = new URL(editActionUrl);
   hostEditUrl.searchParams.append('embed', '1');

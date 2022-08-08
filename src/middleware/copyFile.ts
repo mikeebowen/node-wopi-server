@@ -25,7 +25,7 @@ export async function copyFile(req: ICustomRequest, res: Response, next: NextFun
       count++;
     }
 
-    await updateFile({ filePath: join(process.cwd(), 'files', newFileName), rawBody: req.rawBody });
+    await updateFile(join(process.cwd(), 'files', newFileName), req.rawBody);
 
     const newFiles = await readdir(join(process.cwd(), 'files'));
     newFiles.sort();

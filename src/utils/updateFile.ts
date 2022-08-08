@@ -1,5 +1,8 @@
 import { createWriteStream, existsSync } from 'fs';
 import { stat, writeFile } from 'fs/promises';
+import { userInfo } from 'os';
+import { basename } from 'path';
+import { CheckFileInfoResponse } from '../models';
 import { fileInfo } from './fileInfo';
 
 export async function updateFile(filePath: string, rawBody: Buffer, updateVersion?: boolean) {

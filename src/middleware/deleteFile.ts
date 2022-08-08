@@ -28,5 +28,3 @@ export async function deleteFile(req: Request, res: Response, next: NextFunction
     res.sendStatus(500);
   }
 }
-
-;
