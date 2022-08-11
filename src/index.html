@@ -193,7 +193,8 @@
                 const { files, new_file } = await data.json();
                 this.files = files;
 
-                alert(`${new_file} created`);
+                alert(`${new_file} added`);
+                await this.getFileData();
               } catch (err) {
                 console.error(err.message || err);
               }
@@ -202,15 +203,18 @@
 
           input.click();
         },
+        async getFileData() {
+          const res = await fetch('/fileNames');
+          const data = await res.json();
+          const actionsRes = await fetch('/discovery');
+          const actions = await actionsRes.json();
+          this.actions = actions;
+          this.files.push(...data.files.filter(x => !this.files.some(y => y.name === x.name)));
+          this.wopiServer = data.wopiServer;
+        }
       },
       async mounted() {
-        const res = await fetch('/fileNames');
-        const data = await res.json();
-        const actionsRes = await fetch('/discovery');
-        const actions = await actionsRes.json();
-        this.actions = actions;
-        this.files.push(...data.files);
-        this.wopiServer = data.wopiServer;
+        await this.getFileData();
       },
     })
   </script>

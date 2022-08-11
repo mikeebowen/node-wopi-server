@@ -88,11 +88,13 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       fileInfo.info = info;
     }
 
+    const r = fileInfo;
+
     res.send(fileInfo.info);
   } catch (err) {
     console.error((err as Error).message || err);
 
-    res.status(404);
+    res.sendStatus(404);
 
     return;
   }
