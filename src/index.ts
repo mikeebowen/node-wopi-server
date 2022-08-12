@@ -1,6 +1,4 @@
-'use strict';
-
-require('dotenv').config();
+import 'dotenv/config';
 import { NextFunction, Request, Response } from 'express';
 import { join } from 'path';
 import {
