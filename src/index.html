@@ -146,7 +146,7 @@
       const fileNameParts = name.split('.');
       const ext = fileNameParts[fileNameParts.length - 1];
 
-      if (!['docx', 'xlsx', 'pptx', 'ods', 'odp', 'dotx', 'odt'].includes(ext)) {
+      if (!['docx', 'xlsx', 'pptx'].includes(ext)) {
         return window.alert('Filename must have one of these extensions: ".docx", ".xlsx". or ".pptx"');
       }
 
