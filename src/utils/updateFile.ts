@@ -1,8 +1,5 @@
 import { createWriteStream, existsSync } from 'fs';
 import { stat, writeFile } from 'fs/promises';
-import { userInfo } from 'os';
-import { basename } from 'path';
-import { CheckFileInfoResponse } from '../models';
 import { fileInfo } from './fileInfo';
 
 export async function updateFile(filePath: string, rawBody: Buffer, updateVersion?: boolean) {
@@ -14,7 +11,7 @@ export async function updateFile(filePath: string, rawBody: Buffer, updateVersio
     const wStream = createWriteStream(filePath);
     wStream.write(rawBody);
     const fileStats = await stat(filePath);
-    const time = fileStats.ctimeMs.toString();
+    const time = fileStats.mtimeMs.toString();
 
     if (updateVersion && fileInfo.info) {
       fileInfo.info.Version = time;

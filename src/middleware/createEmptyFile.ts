@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { fileInfo } from '../utils';
 
 export async function createEmptyFile(req:Request, res: Response, next: NextFunction) {
   const { file_id: fileId } = req.params;
-  const filePath = join(process.cwd(), 'files', fileId);
+  const filePath = await fileInfo.getFilePath(fileId);
 
   try {
     await writeFile(filePath, new Uint8Array(Buffer.from('')));

@@ -1,16 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { existsSync } from 'fs';
-import { readdir, readFile } from 'fs/promises';
-import { join } from 'path';
+import { readFile } from 'fs/promises';
 import { fileInfo } from '../utils';
 
 export async function getFile(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    const i = parseInt(req.params.file_id);
-
-    const folderPath = join(process.cwd(), 'files');
-    const fileName = isNaN(i) ? req.params.file_id : (await readdir(folderPath)).sort()[i];
-    const filePath = join(folderPath, fileName);
+    const { file_id: fileId } = req.params;
+    const filePath = await fileInfo.getFilePath(fileId);
 
     if (existsSync(filePath)) {
       const file = await readFile(filePath);

@@ -1,16 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import { readdir, unlink } from 'fs/promises';
-import { join } from 'path';
+import { unlink } from 'fs/promises';
 import { fileInfo } from '../utils/';
 
 export async function deleteFile(req: Request, res: Response, next: NextFunction) {
   try {
     const { file_id: fileId } = req.params;
-    const i = parseInt(fileId);
-
-    const folderPath = join(process.cwd(), 'files');
-    const fileName = isNaN(i) ? fileId : (await readdir(folderPath)).sort()[i];
-    const filePath = join(folderPath, fileName);
+    const filePath = await fileInfo.getFilePath(fileId);
 
     if (Object.hasOwnProperty.call(fileInfo.lock, fileId)) {
       const id = fileId as keyof typeof fileInfo.lock;

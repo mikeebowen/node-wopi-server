@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { Stats } from 'fs';
-import { readdir, stat } from 'fs/promises';
+import { stat } from 'fs/promises';
 import { userInfo } from 'os';
-import { join } from 'path';
+import { basename } from 'path';
 import { CheckFileInfoResponse } from '../models';
 import { fileInfo } from '../utils';
 
@@ -21,10 +21,8 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     }
 
     let fileStats: Stats;
-    const i = parseInt(fileId);
-    const folderPath = join(process.cwd(), 'files');
-    const fileName = isNaN(i) ? fileId : (await readdir(folderPath)).sort()[i];
-    const filePath = join(folderPath, fileName);
+    const filePath = await fileInfo.getFilePath(req.params.file_id);
+    const fileName = basename(filePath);
 
     try {
       fileStats = await stat(filePath);
@@ -54,23 +52,18 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     const info = new CheckFileInfoResponse({
       BaseFileName: fileName,
       OwnerId: userInfo().uid.toString(),
-      // Size: 100,
       Size: fileStats.size,
       UserId: userInfo().username,
       UserFriendlyName: userInfo().username,
-      // Version: new Date(fileStats.mtime).toISOString(),
-      Version: fileStats.ctimeMs.toString(),
-      // Version: 'foobar',
+      Version: fileStats.mtimeMs.toString(),
       SupportsLocks: true,
       SupportsGetLock: true,
       SupportsDeleteFile: true,
       // WebEditingDisabled: false,
       UserCanWrite: true,
       SupportsUpdate: true,
-      // SupportsRename: true,
       SupportsRename: false,
       SupportsCobalt: false,
-      // LastModifiedTime: new Date(),
       LastModifiedTime: new Date(fileStats.mtime).toISOString(),
       BreadcrumbBrandName: 'LocalStorage WOPI Host',
       BreadcrumbBrandUrl: wopiServer,

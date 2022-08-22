@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { readdir } from 'fs/promises';
+import { readdir, stat } from 'fs/promises';
 import { extname, join } from 'path';
 const { WOPI_SERVER: wopiServer } = process.env;
 
@@ -10,18 +10,22 @@ export async function getFileNames(req: Request, res: Response, next: NextFuncti
     return;
   }
 
+  const folderPath = join(process.cwd(), 'files');
+
   try {
-    const folderPath = join(process.cwd(), 'files');
-    const files = (await readdir(folderPath)).sort();
+    const files = await readdir(folderPath);
 
-    res.send({
-      files: files.map((f, i) => {
+    const data = {
+      files: await Promise.all(files.map(async (f, i) => {
         const ext = extname(f);
+        const id = (await stat(join(folderPath, f))).ino;
 
-        return { id: i, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext };
-      }),
-      wopiServer: wopiServer,
-    });
+        return { id, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext };
+      })),
+      wopiServer,
+    };
+
+    res.send(data);
   } catch (error) {
     res.sendStatus(404);
   }

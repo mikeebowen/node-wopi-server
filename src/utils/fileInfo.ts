@@ -25,6 +25,7 @@ export const fileInfo = new FileInfo({
     'ppsm',
     'pdf',
   ],
+  idMap: {},
 });
 Object.seal(fileInfo);
 
