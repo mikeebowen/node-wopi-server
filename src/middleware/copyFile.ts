@@ -46,5 +46,3 @@ export async function copyFile(req: ICustomRequest, res: Response, next: NextFun
     return res.status(500);
   }
 }
-
-;
