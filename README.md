@@ -1,8 +1,8 @@
 # Node.js WOPI Server
 
-This is a sample implementation of the [WOPI Protocol](https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b) written with Node.js.This is not a complete implementation, but is meant to be a example for implementers to use to get started or for reference.
+This is a sample implementation of the [WOPI Protocol](https://docs.microsoft.com/en-us/openspecs/office_protocols/ms-wopi/6a8bb410-68ad-47e4-9dc3-6cf29c6b046b) written with in [TypeScript](https://www.typescriptlang.org/) with [Node.js](https://nodejs.org/en/).This is not a complete implementation, but is meant to be a example for implementers to use to get started or for reference.
 
-This server can be validated with the [WOPI Validator](https://github.com/microsoft/wopi-validator-core) or will work as a live WOPI Server if the computer running the WOPI Server is part of an active directory domain with a server running [Office Online Server](https://docs.microsoft.com/en-us/officeonlineserver/deploy-office-online-server).
+This server can be validated with the [WOPI Validator Core](https://github.com/microsoft/wopi-validator-core) or will work as a live WOPI Server if the computer running the WOPI Server is part of an active directory domain with a server running [Office Online Server](https://docs.microsoft.com/en-us/officeonlineserver/deploy-office-online-server).
 
 ## Requirements
 
@@ -25,7 +25,7 @@ This server can be validated with the [WOPI Validator](https://github.com/micros
 
     - `WOPI_IMPLEMENTED=view,open,edit`
 
-  - `WOPI_SERVER` the url with protocol of your WOPI Server. It must be reachable from your Office Online Server. _localhost will only work [WOPI Validator](https://github.com/microsoft/wopi-validator-core) not with actual files._
+  - `WOPI_SERVER` the url with protocol of your WOPI Server. It must be reachable from your Office Online Server. _localhost will only work [WOPI Validator Core](https://github.com/microsoft/wopi-validator-core) not with actual files._
 
     - So if you view the WOPI Client from http://my-wopi-server:3000 then use:
 
@@ -33,8 +33,5 @@ This server can be validated with the [WOPI Validator](https://github.com/micros
 
 ## Running the Server
 
-To run the server enter `node index.js` from the root of the project.
+To run the server enter `npm start` from the root of the project. Or if you use VS Code, press f5 to use the debugger.
 
-### Debugging with VS Code
-
-If you use VS Code, there is a launch.json file that can be used to debug the WOPI server in VS Code. **Note** the launch.json uses [nodemon](https://www.npmjs.com/package/nodemon) to automatically restart when a file is changed. To use the VS Code debugger, you must either install nodemon globally `npm i -g nodemon` or open launch.json and replace nodemon with node, but this means you will have to manually restart the debugger after each file change.
