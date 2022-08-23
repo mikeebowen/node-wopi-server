@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkFileInfo, getFile, handleHeaders, putFile } from '../middleware';
+import { checkFileInfo, getFile, handleHeaders, putFile } from '../middleware/wopiMiddleware';
 
 // eslint-disable-next-line new-cap
 const router = Router();

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { unlink } from 'fs/promises';
-import { fileInfo } from '../utils/';
+import { fileInfo } from '../../utils';
 
 export async function deleteFile(req: Request, res: Response, next: NextFunction) {
   try {

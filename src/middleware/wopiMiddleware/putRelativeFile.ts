@@ -1,18 +1,12 @@
-// const { join, extname } = require('path');
-// const { readdir } = require('fs/promises');
-// const { decode } = require('utf7');
-// const validFileName = require('valid-filename');
-
-
 import { decode } from 'emailjs-utf7';
 import { NextFunction, Response } from 'express';
 import { readdir } from 'fs/promises';
 import { extname, join } from 'path';
 import { default as isValidFilename, default as validFilename } from 'valid-filename';
-import { ICustomRequest } from '../models';
+import { ICustomRequest } from '../../models';
 // const { decode } = require('utf7');
-// const { fileInfo, updateFile, getWopiMethods } = require('../utils');
-import { fileInfo, getWopiMethods, updateFile } from '../utils';
+// const { fileInfo, updateFile, getWopiMethods } = require('../../utils');
+import { fileInfo, getWopiMethods, updateFile } from '../../utils';
 const { WOPI_SERVER: wopiServer } = process.env;
 
 export async function putRelativeFile(req: ICustomRequest, res: Response, next: NextFunction): Promise<void> {

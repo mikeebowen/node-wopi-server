@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { existsSync } from 'fs';
 import { readFile } from 'fs/promises';
-import { fileInfo } from '../utils';
+import { fileInfo } from '../../utils';
 
 export async function getFile(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {

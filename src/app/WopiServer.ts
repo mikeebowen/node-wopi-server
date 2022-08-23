@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { join } from 'path';
-import { checkAccess, getRawBody } from '../middleware';
+import { checkAccess, getRawBody } from '../middleware/appMiddleware';
 import { appRouter, wopiRouter } from '../router';
 import express = require('express');
 

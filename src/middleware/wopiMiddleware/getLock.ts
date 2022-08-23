@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { fileInfo } from '../utils';
+import { fileInfo } from '../../utils';
 
 export function getLock(req: Request, res: Response, next: NextFunction): void {
   const { file_id: fileId } = req.params;

@@ -1,8 +1,8 @@
 import { NextFunction, Response } from 'express';
 import { readdir } from 'fs/promises';
 import { extname, join } from 'path';
-import { ICustomRequest } from '../models';
-import { updateFile } from '../utils';
+import { ICustomRequest } from '../../models';
+import { updateFile } from '../../utils';
 
 export async function copyFile(req: ICustomRequest, res: Response, next: NextFunction) {
   try {

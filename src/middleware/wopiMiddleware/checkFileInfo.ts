@@ -3,8 +3,8 @@ import { Stats } from 'fs';
 import { stat } from 'fs/promises';
 import { userInfo } from 'os';
 import { basename } from 'path';
-import { CheckFileInfoResponse } from '../models';
-import { fileInfo } from '../utils';
+import { CheckFileInfoResponse } from '../../models';
+import { fileInfo } from '../../utils';
 
 
 export async function checkFileInfo(req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { ICustomRequest } from '../models';
+import { ICustomRequest } from '../../models';
 
 export function getRawBody(req: ICustomRequest, res: Response, next: NextFunction): void {
   const data: Uint8Array[] = [];

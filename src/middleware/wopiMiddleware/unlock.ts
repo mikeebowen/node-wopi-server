@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { fileInfo } from '../utils';
+import { fileInfo } from '../../utils';
 
 export function unlock(req: Request, res: Response, next: NextFunction): void {
   const lockValue = req.header('X-WOPI-Lock');

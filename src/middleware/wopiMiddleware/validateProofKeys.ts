@@ -2,7 +2,7 @@
 
 // const getPem = require('rsa-pem-from-mod-exp')
 // const crypto = require('crypto')
-// const { getProofKeys } = require('../utils')
+// const { getProofKeys } = require('../../utils')
 
 // module.exports = async (req, res, next) => {
 //   const { oldmodulus, oldexponent, modulus, exponent } = await getProofKeys()
@@ -13,9 +13,6 @@
 
 //   const signedWopiProof = Buffer.from(wopiProof, 'base64')
 //   const oldSignedWopiProof = Buffer.from(oldWopiProof, 'base64')
-
-
-
 
 
 //   next()

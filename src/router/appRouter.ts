@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { copyFile, createEmptyFile, getDiscoveryInfo, getFileNames } from '../middleware';
+import { copyFile, createEmptyFile, getDiscoveryInfo, getFileNames } from '../middleware/appMiddleware';
 
 // eslint-disable-next-line new-cap
 const router = Router();

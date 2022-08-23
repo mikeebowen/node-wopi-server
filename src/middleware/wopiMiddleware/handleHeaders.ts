@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { fileInfo } from '../utils';
+import { fileInfo } from '../../utils';
 import { deleteFile, getLock, lock, putRelativeFile, refreshLock, unlock } from './index';
 
 export function handleHeaders(req: Request, res: Response, next: NextFunction): void {

@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { stat } from 'fs/promises';
-import { ICustomRequest } from '../models/ICustomRequest';
-import { fileInfo, updateFile } from '../utils';
+import { ICustomRequest } from '../../models/ICustomRequest';
+import { fileInfo, updateFile } from '../../utils';
 
 export async function putFile(req: ICustomRequest, res: Response, next: NextFunction): Promise<void> {
   const { file_id: fileId } = req.params;
