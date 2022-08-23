@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style type="text/css">
+    #office_frame {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: 0;
+      border: none;
+      display: block;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+
+    .wrap {
+      display: flex;
+      align-items: center;
+      width: 75vw;
+      justify-content: space-between;
+      margin-left: 2vw;
+    }
+
+    .wrap .wrap {
+      width: initial;
+    }
+
+    .edit-new-wrap {
+      display: flex;
+      justify-content: flex-end;
+      width: 75vw;
+      border-bottom: 2px solid darkgray;
+      padding-bottom: 5px;
+      margin-left: 2vw;
+    }
+
+    .wrap button {
+      margin-right: 5px;
+    }
+
+    h3 {
+      margin: 5px;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
+</head>
+
+<body>
+  <span id="app">
+    <span class="edit-new-wrap">
+      <span>
+        <form id="create_new" name="office_form" target="office_frame" method="post" />
+        <button type="button" onclick="editNew()">Edit New</button>
+        <button type="button" onclick="addExisting()">Add Existing</button>
+      </span>
+    </span>
+  </span>
+  <span id="frameholder"></span>
+
+  <script type="text/javascript">
+    let actions, wopiServer;
+    const files = [];
+
+    async function getFileData() {
+      const res = await fetch('/fileNames');
+      const data = await res.json();
+      const actionsRes = await fetch('/discovery');
+
+      actions = await actionsRes.json();
+      files.push(...data.files.filter(x => !files.some(y => y.name === x.name)));
+      wopiServer = data.wopiServer;
+    }
+
+    function createIframe() {
+      const frameholder = document.getElementById('frameholder');
+      const office_frame = document.createElement('iframe');
+      const app = document.getElementById('app');
+
+      office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups';
+      office_frame.name = 'office_frame';
+      office_frame.id = 'office_frame';
+      app.style = 'display: none';
+      // This attribute allows true fullscreen mode in slideshow view
+      // when using PowerPoint Online's 'view' action.
+      //office_frame.setAttribute('allowfullscreen', 'true');
+
+      frameholder.appendChild(office_frame);
+    }
+
+    function createRow(file) {
+      const span = document.createElement('span');
+      span.className = 'wrap';
+      const h = document.createElement('h3');
+      h.innerText = file.name;
+
+      if (actions[file.ext]) {
+        for (let [key, [name, action]] of Object.entries(actions[file.ext])) {
+          if (name !== 'editnew') {
+            const btn = document.createElement('button');
+            btn.type = 'submit';
+            btn.innerText = name;
+
+            const form = document.createElement('form');
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=LiveBasilLiveBasilLiveBasil&access_token_ttl=0`;
+            form.method = 'post';
+
+            form.appendChild(btn);
+            span.appendChild(form);
+          }
+        }
+      }
+      const outerSpan = document.createElement('span');
+
+      outerSpan.className = 'wrap';
+      outerSpan.appendChild(h);
+      outerSpan.appendChild(span);
+
+      return outerSpan;
+    }
+
+    async function populateHtmlForms() {
+      await getFileData();
+
+      const app = document.getElementById('app');
+
+      for (let file of files) {
+
+        if (Object.keys(actions).includes(file.ext)) {
+          const span = createRow(file);
+
+          app.appendChild(span);
+        }
+
+      }
+    }
+
+    async function editNew() {
+      const name = window.prompt('Choose new file name');
+      const fileNameParts = name.split('.');
+      const ext = fileNameParts[fileNameParts.length - 1];
+
+      if (!['docx', 'xlsx', 'pptx'].includes(ext)) {
+        return window.alert('Filename must have one of these extensions: ".docx", ".xlsx". or ".pptx"');
+      }
+
+      if (files.map(t => t.name).includes(name)) {
+        return alert('Filename already exists');
+      }
+
+      await fetch(`/create/${name}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      });
+
+      const form = document.getElementById('create_new');
+      const action = actions[ext].find(([x]) => x === 'editnew')[1];
+      form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=LiveBasilLiveBasilLiveBasil&access_token_ttl=0`;
+
+      form.submit();
+      createIframe();
+    }
+
+    function addExisting() {
+      const input = document.createElement('input');
+      input.type = 'file';
+
+      input.onchange = e => {
+        const [file] = e.target.files;
+        const reader = new FileReader();
+
+        reader.readAsArrayBuffer(file);
+
+        reader.onload = async readerEvent => {
+          try {
+            const { result } = readerEvent.target;
+            const data = await fetch(`/add-file?file_name=${encodeURIComponent(file.name)}`, { method: 'POST', body: result });
+            const { files, new_file } = await data.json();
+
+            const newFile = files.find(x => x.name === new_file);
+            const row = createRow(newFile);
+            const app = document.getElementById('app');
+            app.appendChild(row);
+            files.push(newFile);
+
+            alert(`${new_file} added`);
+          } catch (err) {
+            console.error(err.message || err);
+          }
+        };
+      };
+
+      input.click();
+    }
+
+    populateHtmlForms();
+  </script>
+</body>
+
+</html>
