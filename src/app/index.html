@@ -167,8 +167,8 @@
       const action = actions[ext].find(([x]) => x === 'editnew')[1];
       form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=LiveBasilLiveBasilLiveBasil&access_token_ttl=0`;
 
-      createIframe();
       form.submit();
+      createIframe();
     }
 
     function addExisting() {
