@@ -81,12 +81,10 @@
     function createIframe() {
       const frameholder = document.getElementById('frameholder');
       const office_frame = document.createElement('iframe');
-      const app = document.getElementById('app');
 
       office_frame.sandbox = 'allow-scripts allow-top-navigation allow-downloads allow-forms allow-same-origin allow-popups';
       office_frame.name = 'office_frame';
       office_frame.id = 'office_frame';
-      app.style = 'display: none';
       // This attribute allows true fullscreen mode in slideshow view
       // when using PowerPoint Online's 'view' action.
       //office_frame.setAttribute('allowfullscreen', 'true');
@@ -107,8 +105,11 @@
             btn.type = 'submit';
             btn.innerText = name;
 
+            const token = makeToken(15);
+            const ttl = Date.now() + 300000;
+
             const form = document.createElement('form');
-            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=LiveBasilLiveBasilLiveBasil&access_token_ttl=0`;
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=${token}&access_token_ttl=0`;
             form.method = 'post';
 
             form.appendChild(btn);
@@ -163,9 +164,12 @@
         body: JSON.stringify({})
       });
 
+      const token = makeToken(15);
+      const ttl = Date.now() + 300000;
+
       const form = document.getElementById('create_new');
       const action = actions[ext].find(([x]) => x === 'editnew')[1];
-      form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=LiveBasilLiveBasilLiveBasil&access_token_ttl=0`;
+      form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=${token}&access_token_ttl=0`;
 
       form.submit();
       createIframe();
@@ -201,6 +205,18 @@
       };
 
       input.click();
+    }
+
+    function makeToken(ln) {
+      const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let token = '';
+
+      for (let i = 0; i < ln; i++) {
+        const letter = letters.charAt(Math.floor(Math.random() * letters.length));
+        token += letter;
+      }
+
+      return token;
     }
 
     populateHtmlForms();

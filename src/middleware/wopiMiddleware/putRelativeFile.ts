@@ -1,6 +1,6 @@
 import { decode } from 'emailjs-utf7';
 import { NextFunction, Response } from 'express';
-import { readdir } from 'fs/promises';
+import { chmod, readdir } from 'fs/promises';
 import { extname, join } from 'path';
 import { default as isValidFilename, default as validFilename } from 'valid-filename';
 import { ICustomRequest } from '../../models';
@@ -51,6 +51,7 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
       const filePath = join(folderPath, newFileName);
 
       await updateFile(filePath, req.rawBody ?? Buffer.from(''), true);
+      await chmod(filePath, 0o777);
       const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName);
 
       res.json({
@@ -85,6 +86,7 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
 
       if (overwrite || !exists) {
         const success = await updateFile(filePath, req.rawBody ?? Buffer.from(''), false);
+        await chmod(filePath, 0o777);
         res.status(success ? 200 : 409);
       } else {
         if (isLocked) {

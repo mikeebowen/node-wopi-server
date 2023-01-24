@@ -11,6 +11,12 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
   try {
     const { WOPI_SERVER: wopiServer } = process.env;
     const { file_id: fileId } = req.params;
+    // const query = Object.entries(req.query).reduce(
+    //   function(accumulator, [key, value]) {
+    //     const q = key === 'access_token_ttl' ? `access_token_ttl=${Date.now() + 300000}&` : `${key}=${value}&`;
+
+    //     return accumulator + q;
+    //   }, '') + `WOPISrc=${encodeURIComponent(wopiServer + req.originalUrl.split('?')[0])}`;
 
     if (!wopiServer) {
       throw new Error('WOPI_SERVER environment variable is not set');
@@ -23,6 +29,7 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     let fileStats: Stats;
     const filePath = await fileInfo.getFilePath(req.params.file_id);
     const fileName = basename(filePath);
+    // const actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
 
     try {
       fileStats = await stat(filePath);
@@ -49,6 +56,11 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       } as Stats;
     }
 
+    // const editUrl = actionUrls.find((x: string[]) => x[0] === 'edit')[1];
+    // const viewUrl = actionUrls.find((x: string[]) => x[0] === 'view')[1];
+    // const hostEditUrl = `${editUrl}${editUrl.endsWith('?') ? '' : '&'}${query}`;
+    // const hostViewUrl = `${viewUrl}${viewUrl.endsWith('?') ? '' : '&'}${query}`;
+
     const info = new CheckFileInfoResponse({
       BaseFileName: fileName,
       OwnerId: userInfo().uid.toString(),
@@ -71,6 +83,8 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       BreadcrumbFolderUrl: wopiServer,
       BreadcrumbDocName: fileName,
       ReadOnly: false,
+      // HostEditUrl: hostEditUrl,
+      // HostViewUrl: hostViewUrl,
     });
 
     if (fileInfo?.info?.BaseFileName === fileName) {
