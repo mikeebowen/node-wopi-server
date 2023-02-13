@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { existsSync } from 'fs';
 import { unlink } from 'fs/promises';
 import { fileInfo } from '../../utils';
 
@@ -14,7 +15,9 @@ export async function deleteFile(req: Request, res: Response, next: NextFunction
       res.sendStatus(409);
     }
 
-    await unlink(filePath);
+    if (existsSync(filePath)) {
+      await unlink(filePath);
+    }
 
     res.sendStatus(200);
   } catch (err) {

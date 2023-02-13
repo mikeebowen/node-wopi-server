@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
 import { CheckFileInfoResponse } from './CheckFileInfoResponse';
@@ -44,25 +45,35 @@ export class FileInfo {
   }
 
   getFilePath = async (fileId: string): Promise<string> => {
-    if (Object.hasOwnProperty.call(this.idMap, fileId)) {
-      return this.idMap[fileId];
-    }
-
-    const folderPath = join(process.cwd(), 'files');
-    let fileName = fileId;
-
-    for (const name of (await readdir(folderPath))) {
-      const stats = await stat(join(folderPath, name));
-
-      if (stats.ino.toString() === fileId) {
-        fileName = name;
-        break;
+    try {
+      if (Object.hasOwnProperty.call(this.idMap, fileId)) {
+        return this.idMap[fileId];
       }
+
+      const folderPath = join(process.cwd(), 'files');
+      let fileName = fileId;
+
+      for (const name of (await readdir(folderPath))) {
+        const curFilePath = join(folderPath, name);
+
+        if (existsSync(curFilePath)) {
+          const stats = await stat(curFilePath);
+
+          if (stats.ino.toString() === fileId || name === fileId) {
+            fileName = name;
+            break;
+          }
+        }
+      }
+
+      const filePath = join(folderPath, fileName);
+      this.idMap[fileId] = filePath;
+
+      return filePath;
+    } catch (err: any) {
+      console.error((err as Error).message || err);
+
+      return '';
     }
-
-    const filePath = join(folderPath, fileName);
-    this.idMap[fileId] = filePath;
-
-    return filePath;
   };
 }

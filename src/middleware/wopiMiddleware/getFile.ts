@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { existsSync } from 'fs';
-import { chmod, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { fileInfo } from '../../utils';
 
 export async function getFile(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -9,7 +9,6 @@ export async function getFile(req: Request, res: Response, next: NextFunction): 
     const filePath = await fileInfo.getFilePath(fileId);
 
     if (existsSync(filePath)) {
-      await chmod(filePath, 0o777);
       const file = await readFile(filePath);
 
       if (fileInfo?.info?.Version) {

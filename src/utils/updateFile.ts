@@ -25,5 +25,3 @@ export async function updateFile(filePath: string, rawBody: Buffer, updateVersio
     return 0;
   }
 }
-
-;

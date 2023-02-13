@@ -36,5 +36,3 @@ export function lock(req: Request, res: Response, next: NextFunction): void {
     return;
   }
 }
-
-;
