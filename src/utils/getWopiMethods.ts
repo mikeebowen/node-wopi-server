@@ -1,7 +1,7 @@
 import { IncomingMessage, request } from 'http';
 import { Element, xml2js } from 'xml-js';
 
-export const getWopiMethods = async (): Promise<any> => {
+export async function getWopiMethods(): Promise<any> {
   return new Promise((resolve, reject) => {
     try {
       const { OFFICE_ONLINE_SERVER: officeOnlineServer } = process.env || '';
@@ -65,4 +65,4 @@ export const getWopiMethods = async (): Promise<any> => {
       reject(err);
     }
   });
-};
+}
