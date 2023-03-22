@@ -29,5 +29,3 @@ export function unlock(req: Request, res: Response, next: NextFunction): void {
     return;
   }
 }
-
-;

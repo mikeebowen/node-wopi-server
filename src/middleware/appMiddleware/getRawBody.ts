@@ -13,5 +13,3 @@ export function getRawBody(req: ICustomRequest, res: Response, next: NextFunctio
     next();
   });
 }
-
-;

@@ -32,5 +32,3 @@ export async function putFile(req: ICustomRequest, res: Response, next: NextFunc
     return;
   }
 }
-
-;

@@ -4,9 +4,9 @@ import { Element, xml2js } from 'xml-js';
 export async function getWopiMethods(): Promise<any> {
   return new Promise((resolve, reject) => {
     try {
-      const { OFFICE_ONLINE_SERVER: officeOnlineServer } = process.env || '';
+      const { OFFICE_ONLINE_SERVER: officeOnlineServer } = process.env;
 
-      if (officeOnlineServer == null) {
+      if (!officeOnlineServer) {
         throw new Error('process.env.OFFICE_ONLINE_SERVER must be defined and point to an instance of Office Online Server');
       }
 

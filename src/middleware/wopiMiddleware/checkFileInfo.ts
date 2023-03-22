@@ -60,6 +60,13 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     // const viewUrl = actionUrls.find((x: string[]) => x[0] === 'view')[1];
     // const hostEditUrl = `${editUrl}${editUrl.endsWith('?') ? '' : '&'}${query}`;
     // const hostViewUrl = `${viewUrl}${viewUrl.endsWith('?') ? '' : '&'}${query}`;
+    let isReadOnly = false;
+
+    try {
+      await access(filePath, constants.W_OK);
+    } catch (err) {
+      isReadOnly = true;
+    }
 
     const info = new CheckFileInfoResponse({
       BaseFileName: fileName,
@@ -82,9 +89,11 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       BreadcrumbFolderName: 'WopiStorage',
       BreadcrumbFolderUrl: wopiServer,
       BreadcrumbDocName: fileName,
-      ReadOnly: false,
+      ReadOnly: isReadOnly,
       // HostEditUrl: hostEditUrl,
       // HostViewUrl: hostViewUrl,
+      // HostEditUrl: 'http://mikee-pc:8888',
+      // HostViewUrl: 'http://mikee-pc:8888',
     });
 
     if (fileInfo?.info?.BaseFileName === fileName) {
@@ -104,5 +113,3 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     return;
   }
 }
-
-;

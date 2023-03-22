@@ -30,5 +30,3 @@ export async function getFileNames(req: Request, res: Response, next: NextFuncti
     res.sendStatus(404);
   }
 }
-
-;

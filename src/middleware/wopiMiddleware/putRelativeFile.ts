@@ -116,7 +116,7 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
   }
 }
 
-const getUrls = async (newFileName: string) => {
+async function getUrls(newFileName: string): Promise<{ actionUrl: URL; hostViewUrl: URL; hostEditUrl: URL }> {
   const actionUrl = new URL(`${wopiServer}/wopi/files/${newFileName}`);
   actionUrl.searchParams.append('access_token', 'myVerySecretToken');
   const urls = await getWopiMethods();
@@ -139,4 +139,4 @@ const getUrls = async (newFileName: string) => {
   hostEditUrl.searchParams.append('WOPISrc', actionUrl.href);
 
   return { actionUrl, hostViewUrl, hostEditUrl };
-};
+}

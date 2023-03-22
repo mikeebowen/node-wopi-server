@@ -13,5 +13,3 @@ export function getLock(req: Request, res: Response, next: NextFunction): void {
     res.sendStatus(200);
   }
 }
-
-;

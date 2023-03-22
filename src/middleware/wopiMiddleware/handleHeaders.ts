@@ -35,5 +35,3 @@ export function handleHeaders(req: Request, res: Response, next: NextFunction): 
     return;
   }
 }
-
-;
