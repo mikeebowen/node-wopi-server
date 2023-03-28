@@ -67,7 +67,7 @@
   <script type="text/javascript">
     let actions, wopiServer;
     const files = [];
-
+    let userName = '';
     async function getFileData() {
       const res = await fetch('/fileNames');
       const data = await res.json();
@@ -92,7 +92,7 @@
       frameholder.appendChild(office_frame);
     }
 
-    function createRow(file) {
+    function createRow(file, userName) {
       const span = document.createElement('span');
       span.className = 'wrap';
       const h = document.createElement('h3');
@@ -109,7 +109,7 @@
             const ttl = Date.now() + 300000;
 
             const form = document.createElement('form');
-            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=${token}&access_token_ttl=0`;
+            form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=${token}|${userName}&access_token_ttl=${ttl}`;
             form.method = 'post';
 
             form.appendChild(btn);
@@ -126,15 +126,14 @@
       return outerSpan;
     }
 
-    async function populateHtmlForms() {
+    async function populateHtmlForms(userName) {
       await getFileData();
 
       const app = document.getElementById('app');
 
       for (let file of files) {
-
         if (Object.keys(actions).includes(file.ext)) {
-          const span = createRow(file);
+          const span = createRow(file, userName);
 
           app.appendChild(span);
         }
@@ -165,11 +164,11 @@
       });
 
       const token = makeToken(15);
-      const ttl = Date.now() + 300000;
+      const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
 
       const form = document.getElementById('create_new');
       const action = actions[ext].find(([x]) => x === 'editnew')[1];
-      form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=${token}&access_token_ttl=0`;
+      form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=${token}|${userName}&access_token_ttl=${ttl}`;
 
       form.submit();
       createIframe();
@@ -219,7 +218,35 @@
       return token;
     }
 
-    populateHtmlForms();
+    function isValidUrl(url) {
+      try {
+        return Boolean(new URL(url));
+      } catch (err) {
+        return false;
+      }
+    }
+
+    function getUserName() {
+      while (!userName) {
+        const un = prompt('Please enter a username. Username must not be blank and cannot contain spaces');
+
+        if (un && !un.includes(' ')) {
+          userName = un;
+
+          const params = new URLSearchParams(document.location.search);
+          const url = params.get('action_url');
+          console.log({ url });
+
+          if (url && isValidUrl(url)) {
+            window.location.href = url;
+          }
+        }
+      }
+    }
+
+    getUserName();
+
+    populateHtmlForms(userName);
   </script>
 </body>
 

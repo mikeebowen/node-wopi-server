@@ -1,22 +1,22 @@
 import { NextFunction, Request, Response } from 'express';
-import { Stats } from 'fs';
-import { stat } from 'fs/promises';
+import { constants, Stats } from 'fs';
+import { access, stat } from 'fs/promises';
 import { userInfo } from 'os';
-import { basename } from 'path';
+import { basename, extname } from 'path';
 import { CheckFileInfoResponse } from '../../models';
-import { fileInfo } from '../../utils';
+import { fileInfo, getWopiMethods } from '../../utils';
 
 
 export async function checkFileInfo(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { WOPI_SERVER: wopiServer } = process.env;
     const { file_id: fileId } = req.params;
-    // const query = Object.entries(req.query).reduce(
-    //   function(accumulator, [key, value]) {
-    //     const q = key === 'access_token_ttl' ? `access_token_ttl=${Date.now() + 300000}&` : `${key}=${value}&`;
+    const query = Object.entries(req.query).reduce(
+      function(accumulator, [key, value]) {
+        const q = key === 'access_token_ttl' ? 'access_token_ttl=0&' : `${key}=${value}&`;
 
-    //     return accumulator + q;
-    //   }, '') + `WOPISrc=${encodeURIComponent(wopiServer + req.originalUrl.split('?')[0])}`;
+        return accumulator + q;
+      }, '') + `WOPISrc=${encodeURIComponent(wopiServer + req.originalUrl.split('?')[0])}`;
 
     if (!wopiServer) {
       throw new Error('WOPI_SERVER environment variable is not set');
@@ -29,7 +29,8 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     let fileStats: Stats;
     const filePath = await fileInfo.getFilePath(req.params.file_id);
     const fileName = basename(filePath);
-    // const actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
+    const actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
+    const userName = req.query.access_token?.toString().split('|')[1] ?? userInfo().username;
 
     try {
       fileStats = await stat(filePath);
@@ -56,10 +57,10 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       } as Stats;
     }
 
-    // const editUrl = actionUrls.find((x: string[]) => x[0] === 'edit')[1];
-    // const viewUrl = actionUrls.find((x: string[]) => x[0] === 'view')[1];
-    // const hostEditUrl = `${editUrl}${editUrl.endsWith('?') ? '' : '&'}${query}`;
-    // const hostViewUrl = `${viewUrl}${viewUrl.endsWith('?') ? '' : '&'}${query}`;
+    const editUrl = actionUrls.find((x: string[]) => x[0] === 'edit')[1];
+    const viewUrl = actionUrls.find((x: string[]) => x[0] === 'view')[1];
+    const hostEditUrl = `${editUrl}${editUrl.endsWith('?') ? '' : '&'}${query}`;
+    const hostViewUrl = `${viewUrl}${viewUrl.endsWith('?') ? '' : '&'}${query}`;
     let isReadOnly = false;
 
     try {
@@ -69,40 +70,37 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     }
 
     const info = new CheckFileInfoResponse({
+      AllowExternalMarketplace: true,
       BaseFileName: fileName,
-      OwnerId: userInfo().uid.toString(),
-      Size: fileStats.size,
-      UserId: userInfo().username,
-      UserFriendlyName: userInfo().username,
-      Version: fileStats.mtimeMs.toString(),
-      SupportsLocks: true,
-      SupportsGetLock: true,
-      SupportsDeleteFile: true,
-      // WebEditingDisabled: false,
-      UserCanWrite: true,
-      SupportsUpdate: true,
-      SupportsRename: false,
-      SupportsCobalt: false,
-      LastModifiedTime: new Date(fileStats.mtime).toISOString(),
       BreadcrumbBrandName: 'LocalStorage WOPI Host',
       BreadcrumbBrandUrl: wopiServer,
+      BreadcrumbDocName: fileName,
       BreadcrumbFolderName: 'WopiStorage',
       BreadcrumbFolderUrl: wopiServer,
-      BreadcrumbDocName: fileName,
+      HostEditUrl: `http://mikee-pc:8888?action_url=${encodeURIComponent(hostEditUrl)}`,
+      HostViewUrl: `http://mikee-pc:8888?action_url=${encodeURIComponent(hostViewUrl)}`,
+      LastModifiedTime: new Date(fileStats.mtime).toISOString(),
+      OwnerId: userName,
       ReadOnly: isReadOnly,
-      // HostEditUrl: hostEditUrl,
-      // HostViewUrl: hostViewUrl,
-      // HostEditUrl: 'http://mikee-pc:8888',
-      // HostViewUrl: 'http://mikee-pc:8888',
+      Size: fileStats.size,
+      SupportsCoauth: true,
+      SupportsCobalt: false,
+      SupportsDeleteFile: true,
+      SupportsGetLock: true,
+      SupportsLocks: true,
+      SupportsRename: false,
+      SupportsUpdate: true,
+      UserCanWrite: true,
+      UserFriendlyName: userName,
+      UserId: userName,
+      Version: fileStats.mtimeMs.toString(),
     });
 
     if (fileInfo?.info?.BaseFileName === fileName) {
-      const combined = Object.assign(info, fileInfo.info);
-
-      fileInfo.info = combined;
-    } else {
-      fileInfo.info = info;
+      info.Version = fileInfo.info.Version;
     }
+
+    fileInfo.info = info;
 
     res.send(fileInfo.info);
   } catch (err) {

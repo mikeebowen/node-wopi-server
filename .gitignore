@@ -119,6 +119,6 @@ dist
 case_work/
 # saved files
 files
-!files/.gitkeep
+!files/test.wopitest
 out/
 bin/

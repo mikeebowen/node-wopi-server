@@ -27,5 +27,5 @@ export const fileInfo = new FileInfo({
   ],
   idMap: {},
 });
-Object.seal(fileInfo);
+fileInfo;
 
