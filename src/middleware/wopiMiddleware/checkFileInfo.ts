@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { constants, Stats } from 'fs';
+import { Stats, constants } from 'fs';
 import { access, stat } from 'fs/promises';
 import { userInfo } from 'os';
 import { basename, extname } from 'path';
@@ -57,10 +57,10 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       } as Stats;
     }
 
-    const editUrl = actionUrls.find((x: string[]) => x[0] === 'edit')[1];
-    const viewUrl = actionUrls.find((x: string[]) => x[0] === 'view')[1];
-    const hostEditUrl = `${editUrl}${editUrl.endsWith('?') ? '' : '&'}${query}`;
-    const hostViewUrl = `${viewUrl}${viewUrl.endsWith('?') ? '' : '&'}${query}`;
+    const editUrl = actionUrls?.find((x: string[]) => x[0] === 'edit')[1];
+    const viewUrl = actionUrls?.find((x: string[]) => x[0] === 'view')[1];
+    const hostEditUrl = `${editUrl}${editUrl?.endsWith('?') ? '' : '&'}${query}`;
+    const hostViewUrl = `${viewUrl}${viewUrl?.endsWith('?') ? '' : '&'}${query}`;
     let isReadOnly = false;
 
     try {
@@ -86,6 +86,7 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       SupportsCoauth: true,
       SupportsCobalt: false,
       SupportsDeleteFile: true,
+      SupportsExtendedLockLength: true,
       SupportsGetLock: true,
       SupportsLocks: true,
       SupportsRename: false,

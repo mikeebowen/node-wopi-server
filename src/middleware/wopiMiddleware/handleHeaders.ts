@@ -22,13 +22,18 @@ export function handleHeaders(req: Request, res: Response, next: NextFunction): 
     break;
   case 'PUT_RELATIVE':
     putRelativeFile(req, res, next);
-    // res.sendStatus(501)
     break;
   case 'DELETE':
     deleteFile(req, res, next);
     break;
+  case 'RENAME_FILE':
+    res.sendStatus(501);
+  case 'GET_SHARE_URL':
+    res.sendStatus(501);
+  case 'PUT_USER_INFO':
+    res.sendStatus(501);
   default:
-    res.setHeader('X-WOPI-Lock', fileInfo.lock[fileId] || '');
+    res.setHeader('X-WOPI-Lock', fileInfo.lock[fileId] ?? '');
 
     res.sendStatus(409);
 

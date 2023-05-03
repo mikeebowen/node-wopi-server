@@ -5,7 +5,7 @@ const { WOPI_SERVER: wopiServer } = process.env;
 
 export async function getFileNames(req: Request, res: Response, next: NextFunction): Promise<void> {
   if (!wopiServer) {
-    res.sendStatus(500);
+    res.sendStatus(503);
 
     return;
   }
@@ -27,6 +27,6 @@ export async function getFileNames(req: Request, res: Response, next: NextFuncti
 
     res.send(data);
   } catch (error) {
-    res.sendStatus(404);
+    res.sendStatus(500);
   }
 }
