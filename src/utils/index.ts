@@ -1,3 +1,4 @@
+export * from './asyncHandler';
 export * from './fileInfo';
 // export * from './getProofKeys'
 export * from './getWopiMethods';

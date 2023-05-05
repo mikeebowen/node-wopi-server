@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { copyFile, createEmptyFile, getDiscoveryInfo, getFileNames } from '../middleware/appMiddleware';
-import { asyncHandler } from '../utils/asyncHandler';
+import { asyncHandler } from '../utils';
 
 // eslint-disable-next-line new-cap
 const router = Router();

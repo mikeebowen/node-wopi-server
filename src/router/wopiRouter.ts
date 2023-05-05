@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { checkFileInfo, getFile, handleHeaders, putFile } from '../middleware/wopiMiddleware';
-import { asyncHandler } from '../utils/asyncHandler';
+import { asyncHandler } from '../utils';
 
 // eslint-disable-next-line new-cap
 const router = Router();
