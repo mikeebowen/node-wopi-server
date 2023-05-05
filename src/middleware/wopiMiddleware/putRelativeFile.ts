@@ -1,35 +1,34 @@
 import { decode } from 'emailjs-utf7';
 import { NextFunction, Response } from 'express';
+import { existsSync } from 'fs';
 import { readdir } from 'fs/promises';
 import { extname, join } from 'path';
 import { default as isValidFilename, default as validFilename } from 'valid-filename';
 import { ICustomRequest } from '../../models';
-// const { decode } = require('utf7');
-// const { fileInfo, updateFile, getWopiMethods } = require('../../utils');
 import { fileInfo, getWopiMethods, updateFile } from '../../utils';
 const { WOPI_SERVER: wopiServer } = process.env;
 
 export async function putRelativeFile(req: ICustomRequest, res: Response, next: NextFunction): Promise<void> {
-  if (!wopiServer) {
-    res.sendStatus(500);
+  try {
+    if (!wopiServer) {
+      res.sendStatus(500);
 
-    return;
-  }
+      return;
+    }
 
 
-  const isRelative = req.header('X-WOPI-RelativeTarget');
-  const isSuggested = req.header('X-WOPI-SuggestedTarget');
-  const overwriteHeader = req.header('X-WOPI-OverwriteRelativeTarget');
-  const overwrite = (overwriteHeader && overwriteHeader.toLowerCase() === 'true') || false;
+    const isRelative = req.header('X-WOPI-RelativeTarget');
+    const isSuggested = req.header('X-WOPI-SuggestedTarget');
+    const overwriteHeader = req.header('X-WOPI-OverwriteRelativeTarget');
+    const overwrite = (overwriteHeader && overwriteHeader.toLowerCase() === 'true') || false;
 
-  if (!!isRelative === !!isSuggested) {
-    res.sendStatus(400);
+    if (!!isRelative === !!isSuggested) {
+      res.sendStatus(400);
 
-    return;
-  }
+      return;
+    }
 
-  if (isSuggested) {
-    try {
+    if (isSuggested) {
       const fileName = isSuggested.startsWith('.') ? fileInfo.info?.BaseFileName + isSuggested : isSuggested;
       const decodedFileName = decode(fileName);
       let newFileName = decodedFileName;
@@ -62,24 +61,22 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
       });
 
       return;
-    } catch (err) {
-      console.error((err as Error).message || err);
-
-      res.sendStatus(500);
-
-      return;
-    }
-  } else if (isRelative) {
-    try {
+    } else if (isRelative) {
       const fileName = (isRelative ?? '').startsWith('.') ? fileInfo.info?.BaseFileName + isRelative : isRelative;
       const newFileName = decode(fileName);
       const folderPath = join(process.cwd(), 'files');
       const filePath = join(folderPath, newFileName);
-      const exists = (await readdir(folderPath)).includes(newFileName);
+      const exists = existsSync(filePath);
       const isLocked = Object.hasOwnProperty.call(fileInfo.lock, newFileName);
 
       if (!isValidFilename(newFileName)) {
         res.sendStatus(400);
+
+        return;
+      }
+
+      if (isLocked) {
+        res.setHeader('X-WOPI-Lock', fileInfo.lock[newFileName] || '').sendStatus(409);
 
         return;
       }
@@ -89,11 +86,9 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
 
         res.status(success ? 200 : 409);
       } else {
-        if (isLocked) {
-          res.setHeader('X-WOPI-Lock', fileInfo.lock[newFileName] || '');
-        }
+        res.sendStatus(409);
 
-        res.status(409);
+        return;
       }
 
       const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName);
@@ -106,13 +101,17 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
       });
 
       return;
-    } catch (err) {
-      console.error((err as Error).message || err);
-
-      res.status(500);
+    } else {
+      res.sendStatus(400);
 
       return;
     }
+  } catch (err) {
+    console.error((err as Error).message || err);
+
+    res.sendStatus(500);
+
+    return;
   }
 }
 

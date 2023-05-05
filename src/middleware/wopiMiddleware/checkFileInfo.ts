@@ -27,7 +27,7 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     }
 
     let fileStats: Stats;
-    const filePath = await fileInfo.getFilePath(req.params.file_id);
+    const filePath = await fileInfo.getFilePath(fileId);
     const fileName = basename(filePath);
     const actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
     const userName = req.query.access_token?.toString().split('|')[1] ?? userInfo().username;
@@ -89,8 +89,9 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
       SupportsExtendedLockLength: true,
       SupportsGetLock: true,
       SupportsLocks: true,
-      SupportsRename: false,
+      SupportsRename: true,
       SupportsUpdate: true,
+      UserCanRename: true,
       UserCanWrite: true,
       UserFriendlyName: userName,
       UserId: userName,

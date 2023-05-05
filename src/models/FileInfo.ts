@@ -38,7 +38,7 @@ export class FileInfo {
   idMap: any;
 
   constructor(options: IFileInfo) {
-    this.lock = options.lock || {};
+    this.lock = options.lock ?? {};
     this.info = options.info;
     this.supportedExtensions = options.supportedExtensions;
     this.idMap = options.idMap ?? {};
@@ -46,30 +46,42 @@ export class FileInfo {
 
   getFilePath = async (fileId: string): Promise<string> => {
     try {
+      let id = '';
+
       if (Object.hasOwnProperty.call(this.idMap, fileId)) {
-        return this.idMap[fileId];
+        id = this.idMap[fileId];
       }
 
       const folderPath = join(process.cwd(), 'files');
-      let fileName = fileId;
+      const files = await readdir(folderPath);
 
-      for (const name of (await readdir(folderPath))) {
+      for (const name of files) {
         const curFilePath = join(folderPath, name);
 
         if (existsSync(curFilePath)) {
           const stats = await stat(curFilePath);
+          const n = stats.ino.toString();
 
-          if (stats.ino.toString() === fileId || name === fileId) {
-            fileName = name;
+          if (n === fileId || name === fileId) {
+            this.idMap[name] = n;
+            id = n;
+
             break;
           }
         }
       }
 
-      const filePath = join(folderPath, fileName);
-      this.idMap[fileId] = filePath;
+      for (const name of files) {
+        const fp = join(folderPath, name);
 
-      return filePath;
+        const stats = await stat(fp);
+
+        if (stats.ino.toString() === id) {
+          return fp;
+        }
+      }
+
+      return id;
     } catch (err: any) {
       console.error((err as Error).message || err);
 

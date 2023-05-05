@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { fileInfo } from '../../utils';
 
-// const { fileInfo } = require('../../utils');
-
 export function lock(req: Request, res: Response, next: NextFunction): void {
   const lockValue = req.header('X-WOPI-Lock');
   const oldLockValue = req.header('X-WOPI-OldLock');

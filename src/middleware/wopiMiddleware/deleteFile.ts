@@ -1,7 +1,12 @@
+import { exec } from 'child_process';
 import { NextFunction, Request, Response } from 'express';
 import { existsSync } from 'fs';
 import { unlink } from 'fs/promises';
+import { platform } from 'process';
+import { promisify } from 'util';
 import { fileInfo } from '../../utils';
+
+const execPromise = promisify(exec);
 
 export async function deleteFile(req: Request, res: Response, next: NextFunction) {
   try {
@@ -16,7 +21,11 @@ export async function deleteFile(req: Request, res: Response, next: NextFunction
     }
 
     if (existsSync(filePath)) {
-      await unlink(filePath);
+      if (platform === 'win32') {
+        await execPromise(`del ${filePath}`);
+      } else {
+        await unlink(filePath);
+      }
     }
 
     res.sendStatus(200);
