@@ -5,7 +5,7 @@ import { IncomingMessage } from 'http';
 const convert = require('xml-js');
 const { OFFICE_ONLINE_SERVER: officeOnlineServer } = process.env;
 
-module.exports = async function() {
+export async function getProofKeys() {
   return new Promise((resolve, reject) => {
     if (officeOnlineServer == null) {
       throw new Error('process.env.OFFICE_ONLINE_SERVER must be defined and point to an instance of Office Online Server');
@@ -41,4 +41,6 @@ module.exports = async function() {
 
     http.request(options, callback).end();
   });
-};
+}
+
+;

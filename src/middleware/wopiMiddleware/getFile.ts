@@ -4,24 +4,18 @@ import { readFile } from 'fs/promises';
 import { fileInfo } from '../../utils';
 
 export async function getFile(req: Request, res: Response, next: NextFunction): Promise<void> {
-  try {
-    const { file_id: fileId } = req.params;
-    const filePath = await fileInfo.getFilePath(fileId);
+  const { file_id: fileId } = req.params;
+  const filePath = await fileInfo.getFilePath(fileId);
 
-    if (existsSync(filePath)) {
-      const file = await readFile(filePath);
+  if (existsSync(filePath)) {
+    const file = await readFile(filePath);
 
-      if (fileInfo?.info?.Version) {
-        res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version);
-      }
-
-      res.status(200).send(file);
-    } else {
-      res.sendStatus(404);
+    if (fileInfo?.info?.Version) {
+      res.setHeader('X-WOPI-ItemVersion', fileInfo.info.Version);
     }
-  } catch (err) {
-    console.error((err as Error)?.message || err);
 
-    res.sendStatus(500);
+    res.status(200).send(file);
+  } else {
+    res.sendStatus(404);
   }
 }

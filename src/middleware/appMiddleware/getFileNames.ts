@@ -12,21 +12,17 @@ export async function getFileNames(req: Request, res: Response, next: NextFuncti
 
   const folderPath = join(process.cwd(), 'files');
 
-  try {
-    const files = await readdir(folderPath);
+  const files = await readdir(folderPath);
 
-    const data = {
-      files: await Promise.all(files.map(async (f, i) => {
-        const ext = extname(f);
-        const id = (await stat(join(folderPath, f))).ino;
+  const data = {
+    files: await Promise.all(files.map(async (f, i) => {
+      const ext = extname(f);
+      const id = (await stat(join(folderPath, f))).ino;
 
-        return { id, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext };
-      })),
-      wopiServer,
-    };
+      return { id, name: f, ext: ext.startsWith('.') ? ext.replace('.', '') : ext };
+    })),
+    wopiServer,
+  };
 
-    res.send(data);
-  } catch (error) {
-    res.sendStatus(500);
-  }
+  res.send(data);
 }
