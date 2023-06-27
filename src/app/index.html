@@ -106,7 +106,8 @@
             btn.innerText = name;
 
             const token = makeToken(15);
-            const ttl = Date.now() + 300000;
+            // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
+            const ttl = 0;
 
             const form = document.createElement('form');
             form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${file.id}`)}&access_token=${token}|${userName}&access_token_ttl=${ttl}`;
@@ -164,7 +165,8 @@
       });
 
       const token = makeToken(15);
-      const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
+      // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
+      const ttl = 0;
 
       const form = document.getElementById('create_new');
       const action = actions[ext].find(([x]) => x === 'editnew')[1];
