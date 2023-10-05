@@ -54,11 +54,13 @@
 
 <body>
   <span id="app">
+    <h2 id="un" class="edit-new-wrap"></h2>
     <span class="edit-new-wrap">
       <span>
         <form id="create_new" name="office_form" target="office_frame" method="post" />
         <button type="button" onclick="editNew()">Edit New</button>
         <button type="button" onclick="addExisting()">Add Existing</button>
+        <button type="button" onclick="updateUserName()">Update UserNmae</button>
       </span>
     </span>
   </span>
@@ -229,11 +231,14 @@
     }
 
     function getUserName() {
+      userName = localStorage.getItem('userName');
+
       while (!userName) {
         const un = prompt('Please enter a username. Username must not be blank and cannot contain spaces');
 
-        if (un && !un.includes(' ')) {
-          userName = un;
+        if (un) {
+          userName = encodeURIComponent(un.trim());
+          localStorage.setItem('userName', userName);
 
           const params = new URLSearchParams(document.location.search);
           const url = params.get('action_url');
@@ -244,6 +249,15 @@
           }
         }
       }
+
+      document.getElementById('un').innerText = `User: ${decodeURIComponent(userName)}`;
+    }
+
+    function updateUserName() {
+      localStorage.removeItem('userName');
+      userName = '';
+
+      getUserName();
     }
 
     getUserName();
