@@ -3,43 +3,39 @@ import { fileInfo } from '../../utils';
 import { deleteFile, getLock, lock, putRelativeFile, refreshLock, renameFile, unlock } from './index';
 
 export async function handleHeaders(req: Request, res: Response, next: NextFunction): Promise<void> {
-  const operation = req.header('X-WOPI-Override');
+  const operation = req.header('X-WOPI-Override') ?? '';
+
+
+  const unsupported = [
+    'ADD_ACTIVITIES',
+    'CHECK_POLICY',
+    'CHECK_USER_ACCESS',
+    'COBALT',
+    'GET_ACTIVITIES',
+    'GET_FILE_USER_VALUE',
+    'GET_RESTRICTED_LINK',
+    'GET_SHARE_URL',
+    'GRANT_USER_ACCESS',
+    'PUT_USER_INFO',
+    'READ_SECURE_STORE',
+    'REVOKE_RESTRICTED_LINK',
+    'SET_FILE_USER_VALUE',
+  ];
+
+  if (unsupported.includes(operation)) {
+    res.sendStatus(501);
+
+    return;
+  }
 
   const { file_id: fileId } = req.params;
 
   switch (operation) {
-    case 'ADD_ACTIVITIES':
-      res.sendStatus(501);
-      break;
-    case 'CHECK_POLICY':
-      res.sendStatus(501);
-      break;
-    case 'CHECK_USER_ACCESS':
-      res.sendStatus(501);
-      break;
     case 'DELETE':
       await deleteFile(req, res, next);
       break;
-    case 'COBALT':
-      res.sendStatus(501);
-      break;
-    case 'GET_ACTIVITIES':
-      res.sendStatus(501);
-      break;
-    case 'GET_FILE_USER_VALUE':
-      res.sendStatus(501);
-      break;
     case 'GET_LOCK':
       getLock(req, res, next);
-      break;
-    case 'GET_RESTRICTED_LINK':
-      res.sendStatus(501);
-      break;
-    case 'GET_SHARE_URL':
-      res.sendStatus(501);
-      break;
-    case 'GRANT_USER_ACCESS':
-      res.sendStatus(501);
       break;
     case 'LOCK':
       lock(req, res, next);
@@ -47,23 +43,11 @@ export async function handleHeaders(req: Request, res: Response, next: NextFunct
     case 'PUT_RELATIVE':
       await putRelativeFile(req, res, next);
       break;
-    case 'PUT_USER_INFO':
-      res.sendStatus(501);
-      break;
-    case 'READ_SECURE_STORE':
-      res.sendStatus(501);
-      break;
     case 'REFRESH_LOCK':
       refreshLock(req, res, next);
       break;
     case 'RENAME_FILE':
       await renameFile(req, res, next);
-      break;
-    case 'REVOKE_RESTRICTED_LINK':
-      res.sendStatus(501);
-      break;
-    case 'SET_FILE_USER_VALUE':
-      res.sendStatus(501);
       break;
     case 'UNLOCK':
       unlock(req, res, next);

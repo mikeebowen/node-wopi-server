@@ -10,6 +10,7 @@ import { fileInfo, getWopiMethods } from '../../utils';
 export async function checkFileInfo(req: Request, res: Response, next: NextFunction): Promise<void> {
   const { WOPI_SERVER: wopiServer } = process.env;
   const { file_id: fileId } = req.params;
+
   const query = Object.entries(req.query).reduce(
     function(accumulator, [key, value]) {
       const q = key === 'access_token_ttl' ? 'access_token_ttl=0&' : `${key}=${value}&`;
