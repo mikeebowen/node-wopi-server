@@ -67,17 +67,19 @@
   <span id="frameholder"></span>
 
   <script type="text/javascript">
-    let actions, wopiServer;
-    const files = [];
+    let actions;
 
     async function getFileData() {
       const res = await fetch('/fileNames');
       const data = await res.json();
       const actionsRes = await fetch('/discovery');
+      const files = [];
 
       actions = await actionsRes.json();
       files.push(...data.files.filter(x => !files.some(y => y.name === x.name)));
-      wopiServer = data.wopiServer;
+      sessionStorage.setItem('wopiServer', data.wopiServer);
+
+      return files;
     }
 
     function createIframe() {
@@ -109,6 +111,7 @@
 
             const token = sessionStorage.getItem('token');
             const userName = sessionStorage.getItem('userName');
+            const wopiServer = sessionStorage.getItem('wopiServer');
             // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
             const ttl = 0;
 
@@ -132,7 +135,7 @@
 
     async function populateHtmlForms() {
       getUserName();
-      await getFileData();
+      const files = await getFileData();
 
       const app = document.getElementById('app');
       app.innerHTML = '';
@@ -171,6 +174,7 @@
 
       const token = sessionStorage.getItem('token');
       const userName = sessionStorage.getItem('userName');
+      const wopiServer = sessionStorage.getItem('wopiServer');
       // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
       const ttl = 0;
 
