@@ -53,23 +53,23 @@
 </head>
 
 <body>
-  <span id="app">
-    <h2 id="un" class="edit-new-wrap"></h2>
-    <span class="edit-new-wrap">
-      <span>
-        <form id="create_new" name="office_form" target="office_frame" method="post" />
-        <button type="button" onclick="editNew()">Edit New</button>
-        <button type="button" onclick="addExisting()">Add Existing</button>
-        <button type="button" onclick="updateUserName()">Update UserName</button>
-      </span>
+  <form id="create_new" name="office_form" target="office_frame" method="post" />
+  <h2 id="un" class="edit-new-wrap"></h2>
+  <span class="edit-new-wrap">
+    <span>
+      <button type="button" onclick="editNew()">Edit New</button>
+      <button type="button" onclick="addExisting()">Add Existing</button>
+      <button type="button" onclick="updateUserName()">Update UserName</button>
     </span>
+  </span>
+  <span id="app">
   </span>
   <span id="frameholder"></span>
 
   <script type="text/javascript">
     let actions, wopiServer;
     const files = [];
-    let userName = '';
+
     async function getFileData() {
       const res = await fetch('/fileNames');
       const data = await res.json();
@@ -94,7 +94,7 @@
       frameholder.appendChild(office_frame);
     }
 
-    function createRow(file, userName) {
+    function createRow(file) {
       const span = document.createElement('span');
       span.className = 'wrap';
       const h = document.createElement('h3');
@@ -107,7 +107,8 @@
             btn.type = 'submit';
             btn.innerText = name;
 
-            const token = makeToken(15);
+            const token = sessionStorage.getItem('token');
+            const userName = sessionStorage.getItem('userName');
             // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
             const ttl = 0;
 
@@ -129,14 +130,16 @@
       return outerSpan;
     }
 
-    async function populateHtmlForms(userName) {
+    async function populateHtmlForms() {
+      getUserName();
       await getFileData();
 
       const app = document.getElementById('app');
+      app.innerHTML = '';
 
       for (let file of files) {
         if (Object.keys(actions).includes(file.ext)) {
-          const span = createRow(file, userName);
+          const span = createRow(file);
 
           app.appendChild(span);
         }
@@ -166,7 +169,8 @@
         body: JSON.stringify({})
       });
 
-      const token = makeToken(15);
+      const token = sessionStorage.getItem('token');
+      const userName = sessionStorage.getItem('userName');
       // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
       const ttl = 0;
 
@@ -210,18 +214,6 @@
       input.click();
     }
 
-    function makeToken(ln) {
-      const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let token = '';
-
-      for (let i = 0; i < ln; i++) {
-        const letter = letters.charAt(Math.floor(Math.random() * letters.length));
-        token += letter;
-      }
-
-      return token;
-    }
-
     function isValidUrl(url) {
       try {
         return Boolean(new URL(url));
@@ -231,14 +223,16 @@
     }
 
     function getUserName() {
-      userName = localStorage.getItem('userName');
+      userName = sessionStorage.getItem('userName');
 
       while (!userName) {
-        const un = prompt('Please enter a username. Username must not be blank and cannot contain spaces');
+        let un = prompt('Please enter a username. Username must not be blank and cannot contain spaces');
 
         if (un) {
+          const token = prompt('Please enter your password.');
           userName = encodeURIComponent(un.trim());
-          localStorage.setItem('userName', userName);
+          sessionStorage.setItem('userName', userName);
+          sessionStorage.setItem('token', token);
 
           const params = new URLSearchParams(document.location.search);
           const url = params.get('action_url');
@@ -247,6 +241,11 @@
           if (url && isValidUrl(url)) {
             window.location.href = url;
           }
+
+          populateHtmlForms(userName);
+        } else {
+          alert('Username cannot be blank');
+          un = prompt('Please enter a username. Username must not be blank');
         }
       }
 
@@ -254,15 +253,13 @@
     }
 
     function updateUserName() {
-      localStorage.removeItem('userName');
-      userName = '';
+      sessionStorage.removeItem('userName');
+      sessionStorage.removeItem('token');
 
       getUserName();
     }
 
-    getUserName();
-
-    populateHtmlForms(userName);
+    populateHtmlForms();
   </script>
 </body>
 
