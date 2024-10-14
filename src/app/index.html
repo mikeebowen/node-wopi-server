@@ -48,6 +48,10 @@
     h3 {
       margin: 5px;
     }
+
+    span.wrap:hover {
+      background-color: rgba(230, 230, 230, 0.3);
+    }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui" />
 </head>
@@ -154,6 +158,7 @@
       const name = window.prompt('Choose new file name');
       const fileNameParts = name.split('.');
       const ext = fileNameParts[fileNameParts.length - 1];
+      const files = await getFileData();
 
       if (!['docx', 'xlsx', 'pptx'].includes(ext)) {
         return window.alert('Filename must have one of these extensions: ".docx", ".xlsx". or ".pptx"');
@@ -177,7 +182,6 @@
       const wopiServer = sessionStorage.getItem('wopiServer');
       // const ttl = userName === 'UserB' ? Date.now() + 12000000 : Date.now() + 300000;
       const ttl = 0;
-
       const form = document.getElementById('create_new');
       const action = actions[ext].find(([x]) => x === 'editnew')[1];
       form.action = `${action}${action.endsWith('?') ? '' : '&'}WOPISrc=${encodeURIComponent(`${wopiServer}/wopi/files/${name}`)}&access_token=${token}|${userName}&access_token_ttl=${ttl}`;

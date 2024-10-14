@@ -81,6 +81,11 @@ export class FileInfo {
         }
       }
 
+      if (!id) {
+        id = join(folderPath, fileId);
+        this.idMap[fileId] = id;
+      }
+
       return id;
     } catch (err: any) {
       console.error((err as Error).message || err);
