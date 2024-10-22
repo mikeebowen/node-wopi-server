@@ -29,8 +29,12 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
   let fileStats: Stats;
   const filePath = await fileInfo.getFilePath(fileId);
   const fileName = basename(filePath);
-  const actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
   const userName = req.query.access_token?.toString().split('|')[1] ?? userInfo().username;
+  let actionUrls;
+
+  if (!fileName.endsWith('.wopitest')) {
+    actionUrls = (await getWopiMethods())[extname(filePath).replace('.', '')];
+  }
 
   try {
     fileStats = await stat(filePath);
