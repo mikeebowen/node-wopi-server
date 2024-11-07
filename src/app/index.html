@@ -16,6 +16,10 @@
       display: block;
     }
 
+    #edit-new-button {
+      display: none;
+    }
+
     .w-100 {
       width: 100%;
     }
@@ -61,7 +65,7 @@
   <h2 id="un" class="edit-new-wrap"></h2>
   <span class="edit-new-wrap">
     <span>
-      <button type="button" onclick="editNew()">Edit New</button>
+      <button type="button" id="edit-new-button" onclick="editNew()">Edit New</button>
       <button type="button" onclick="addExisting()">Add Existing</button>
       <button type="button" onclick="updateUserName()">Update UserName</button>
     </span>
@@ -125,6 +129,8 @@
 
             form.appendChild(btn);
             span.appendChild(form);
+          } else {
+            document.getElementById('edit-new-button').style.display = 'inline-block';
           }
         }
       }
