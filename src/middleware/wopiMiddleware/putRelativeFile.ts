@@ -36,8 +36,7 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
     let count = 1;
 
     while (files.includes(newFileName)) {
-      newFileName = `v${count}.${decodedFileName}`;
-      count++;
+      newFileName = `v${count++}.${decodedFileName}`;
     }
 
     if (!validFilename(newFileName)) {
@@ -50,13 +49,20 @@ export async function putRelativeFile(req: ICustomRequest, res: Response, next: 
 
     await updateFile(filePath, req.rawBody ?? Buffer.from(''), true);
 
-    const { actionUrl, hostViewUrl, hostEditUrl } = await getUrls(newFileName);
+    let actionUrl; let hostViewUrl; let hostEditUrl;
+
+    if (!filePath.includes('.wopitest')) {
+      const urlInfo = await getUrls(newFileName);
+      actionUrl = urlInfo.actionUrl;
+      hostViewUrl = urlInfo.hostViewUrl;
+      hostEditUrl = urlInfo.hostEditUrl;
+    }
 
     res.json({
       Name: newFileName,
-      Url: actionUrl.href,
-      HostEditUrl: hostEditUrl.href,
-      HostViewUrl: hostViewUrl.href,
+      Url: actionUrl?.href,
+      HostEditUrl: hostEditUrl?.href,
+      HostViewUrl: hostViewUrl?.href,
     });
 
     return;
