@@ -61,10 +61,12 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     } as Stats;
   }
 
-  const editUrl = actionUrls?.find((x: string[]) => x[0] === 'edit')[1];
-  const viewUrl = actionUrls?.find((x: string[]) => x[0] === 'view')[1];
-  const hostEditUrl = `${editUrl}${editUrl?.endsWith('?') ? '' : '&'}${query}`;
-  const hostViewUrl = `${viewUrl}${viewUrl?.endsWith('?') ? '' : '&'}${query}`;
+  const editUrls = actionUrls?.find((x: string[]) => x[0] === 'edit');
+  const viewUrls = actionUrls?.find((x: string[]) => x[0] === 'view');
+  const editUrl = editUrls?.length > 0 && editUrls[1];
+  const viewUrl = viewUrls?.length > 0 && viewUrls[1];
+  const hostEditUrl = editUrl && `${editUrl}${editUrl?.endsWith('?') ? '' : '&'}${query}`;
+  const hostViewUrl = viewUrl && `${viewUrl}${viewUrl?.endsWith('?') ? '' : '&'}${query}`;
   let isReadOnly = false;
 
   try {
@@ -81,8 +83,8 @@ export async function checkFileInfo(req: Request, res: Response, next: NextFunct
     BreadcrumbDocName: fileName,
     BreadcrumbFolderName: 'WopiStorage',
     BreadcrumbFolderUrl: wopiServer,
-    HostEditUrl: `${wopiServer}?action_url=${encodeURIComponent(hostEditUrl)}`,
-    HostViewUrl: `${wopiServer}?action_url=${encodeURIComponent(hostViewUrl)}`,
+    HostEditUrl: hostEditUrl && `${wopiServer}?action_url=${encodeURIComponent(hostEditUrl)}`,
+    HostViewUrl: hostViewUrl && `${wopiServer}?action_url=${encodeURIComponent(hostViewUrl)}`,
     LastModifiedTime: new Date(fileStats.mtime).toISOString(),
     OwnerId: userName,
     ReadOnly: isReadOnly,
